@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Send Message</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+         <link rel="stylesheet" href="style.css">
+       
+    </head>
+    <body>
+        <div class="topnav" id="myTopnav">
+            <a href="design.html" class="active">Home</a>
+            <a href="staffCourse.jsp" >Courses</a>
+            <a href="veiwMessages.jsp" >Message</a>
+            <div class="dropdown">
+                <button class="dropbtn" id="myTopnav">Contact 
+                    <i class="fa fa-caret-down"></i>
+                </button>
+                <div class="dropdown-content">
+                    <a href="contact.jsp">staff email</a>
+                    <a href="officehourse.jsp">staff office hours</a>
+                </div>
+            </div> 
+            <a href="#" class="icon" onclick="myFunction()">
+                <i class="fa fa-bars"></i>
+            </a>
+            <div class="dropdown" id="topnav-right">
+                <button class="dropbtn" id="myTopnav">Setting 
+                    <i class="fa fa-caret-down"></i>
+                </button>
+                <div class="dropdown-content" >
+                    <a href="logOut">Log-Out</a>
+                    <a href="changeInfo.jsp">Change Info</a>
+                </div>
+            </div>  
+        </div>
+
+        <p id="searchBar"></p>
+        <p id="show"></p>
+
+        <br>
+
+        <table border="1">
+            <form action="sendMessage" id="usrform" onsubmit="return ValidateForm(this);">
+
+                <tr>
+                    <td for="to"> To</td>
+                    <td> <input placeholder="To" type="text" name="to"></td>
+
+                </tr>
+                <tr>
+                    <td for="subject">Subject</td>
+                    <td><input placeholder="Subject" type="text" name="subject"  /></td>
+                </tr>
+
+                <tr>
+                    <td></td>
+                    <td> <textarea  for="msg" placeholder="Enter text here..." rows="4" cols="50" name="msg" form="usrform"></textarea></td>
+                </tr>
+
+                <tr>
+                    <td></td>
+                    <td> <input type="submit" value="Send"></td>
+                </tr>
+
+            </form>
+        </table>
+
+    </body>
+
+    <script type="text/javascript" >
+        function ValidateForm(frm) {
+            if (frm.msg.value == "") {
+                alert('No message to send');
+                frm.msg.focus();
+                return false;
+            }
+            if (frm.subject.value == "") {
+                alert('please Enter Subject.');
+                frm.subject.focus();
+                return false;
+            }
+            if (frm.to.value == "") {
+                alert('please Enter Email .');
+                frm.to.focus();
+                return false;
+            }
+
+            return true;
+        }
+    </script>
+</html>
