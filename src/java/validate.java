@@ -1,4 +1,5 @@
 
+import Helpers.DatabaseConnector;
 import java.sql.PreparedStatement;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -73,13 +74,14 @@ public class validate extends HttpServlet {
                     out.print(rs.getString("mail"));
                     out.print(rs.getString("gender"));
                     String user_name = rs.getString("user_name");
-
+                    int id=rs.getInt("id");
                     HttpSession session = request.getSession();
 
                     session.setAttribute("email", email);
+                    session.setAttribute("id", id);
                     session.setAttribute("username", user_name);
                     session.setAttribute("password", pass);
-                    session.setAttribute("user_type", "staff");
+                    session.setAttribute("user_type", "staff_member");
                     response.sendRedirect("DashboardController");
                 }
                 if (notExists) {

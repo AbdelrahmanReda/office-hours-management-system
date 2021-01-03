@@ -4,6 +4,9 @@
     Author     : boody
 --%>
 
+<%@ page import="staff.OfficeHoursController" %>
+
+
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <nav id="sidebar">
@@ -17,14 +20,22 @@
         <li>
             <a class="Transactins" href="staffCourse.jsp">Courses</a>
         </li>
-         <li>
+        <li>
             <a class="Transactins" href="veiwMessages.jsp">Messages</a>
         </li>  
-         <li>
+        <li>
             <a class="Transactins" href="contact.jsp">Staff E-mails</a>
         </li>
-         <li>
+        <li>
             <a class="Transactins" href="officehourse.jsp">Staff office hours</a>
-        </li>  
+        </li>
+        
+        <%if (session.getAttribute("user_type").toString().equals("staff_member")) {%>
+
+        <li>
+            <a class="Manage-office-hours" href="OfficeHoursController">Manage office hours</a>
+        </li>
+
+        <%}%>
     </ul>
 </nav>
