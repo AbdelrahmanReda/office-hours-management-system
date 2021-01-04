@@ -146,8 +146,8 @@ public class OfficeHoursController extends HttpServlet {
 
             request.setAttribute("OfficeHours", getOfficeHourse(request));
 
-// request.getParameter("operation");
-            //System.out.println("operation is e daaaaaaaaaaaaaaaaaaaa" + request.getParameter("operation"));
+             //request.getParameter("operation");
+            System.out.println("operation is e daaaaaaaaaaaaaaaaaaaa" + request.getParameter("operation"));
             //JsonObject data = new Gson().fromJson(request.getReader(), JsonObject.class);
             System.out.println("-------------------------------");
             //request.getRequestDispatcher("manage_office_hours.jsp").forward(request, response);
@@ -166,7 +166,9 @@ public class OfficeHoursController extends HttpServlet {
             }
             if (request.getParameter("operation").equals("update")) {
                 System.out.println("update operation");
-                updateOfficeHour(request);
+                System.out.println("id is"+request.getParameter("id"
+                        + ""));
+                //updateOfficeHour(request);
             }
             if (request.getParameter("operation").equals("insertion")) {
                 System.out.println("insert operation");

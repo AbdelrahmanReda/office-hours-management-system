@@ -33,7 +33,7 @@
         <%if (session.getAttribute("user_type").toString().equals("staff_member")) {%>
 
         <li>
-            <a class="Manage-office-hours" href="OfficeHoursController">Manage office hours</a>
+            <a class="Manage-office-hours" href="manage_office_hours.jsp">Manage office hours</a>
         </li>
 
         <%}%>

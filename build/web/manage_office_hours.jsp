@@ -108,55 +108,108 @@
 <%@ include file = "layout\scripts.jsp" %>
 <script>
 
-    function buildTable(jsonObject) {
+
+
+    function jsonToURI(p) {
+        text = ""
+        for (var key in p) {
+            if (p.hasOwnProperty(key)) {
+                text = text + key + "=" + p[key] + "&"
+
+
+            }
+        }
+        return text;
+    }
+
+    function update(id) {
+      
+
+        data = {
+            operation: "update",
+            id: id
+        };
+
        
- $('#office_hourse_data').empty();
+        $.ajax({
+            url: 'OfficeHoursController',
+            method: 'POST',
+            data: jsonToURI(data),
+            success: function (resultText) {
+
+                console.log(resultText);
+                buildTable(resultText);
+                //$('#result').html(resultText);
+            },
+            error: function (jqXHR, exception) {
+                console.log('Error occured!!');
+            }
+        });
+
+
+
+
+
+    }
+    function deleteOfficeHour(id) {
+
+        data = {
+            operation: "delete",
+            id: id
+        };
+
+       
+        $.ajax({
+            url: 'OfficeHoursController',
+            method: 'POST',
+            data: jsonToURI(data),
+            success: function (resultText) {
+
+
+               getOfficeHourse();
+                //$('#result').html(resultText);
+            },
+            error: function (jqXHR, exception) {
+                console.log('Error occured!!');
+            }
+        });
+
+
+
+    }
+
+    function buildTable(jsonObject) {
+
+        $('#office_hourse_data').empty();
         for (var i = 0; i < jsonObject.length; i++) {
-            
+
             $('#office_hourse_data').append(
                     '<tr> <td>'
-                    +jsonObject[i]['id']
-                    +'</td> <td>'
-                    +jsonObject[i]['day']
-                    +'</td> <td>'
-                    +jsonObject[i]['time']
-                    +'</td> <td> <button type="submit" onclick="delete('+jsonObject[i]['id']+') " class="btn btn-danger">Delete</button>'
-                    +'<button type="submit" onclick="update('+jsonObject[i]['id']+') " class="btn btn-success">Update</button> </td>'
-                    +'</tr>'
-                 
+                    + jsonObject[i]['id']
+                    + '</td> <td>'
+                    + jsonObject[i]['day']
+                    + '</td> <td>'
+                    + jsonObject[i]['time']
+                    + '</td> <td> <button type="submit" onclick="deleteOfficeHour(' + jsonObject[i]['id'] + ') " class="btn btn-danger">Delete</button>'
+                    + '<button type="submit" onclick="update(' + jsonObject[i]['id'] + ') " class="btn btn-success">Update</button> </td>'
+                    + '</tr>'
+
                     );
-            
-            
-            
         }
-       
-//
-//        var input = null;
-//        var form =null;
-//        const td = document.createElement("td");
-//        form=document.createElement("form");
-//        form.setAttribute("style","float: right");
-//        form.setAttribute("style","POST");
-//        
-//        input = document.createElement("input");
-//        input.setAttribute("type", "hidden");
-//        input.setAttribute("name", "operation");
-//        input.setAttribute("value", "delte");
-//        
-//        td.appendChild(newContent);
-//        console.log(td);
+
+
 
     }
     getOfficeHourse();
     function getOfficeHourse() {
-       
+      
 
         $.ajax({
             url: 'OfficeHoursController',
             method: 'POST',
             data: $('#select-form').serialize(),
             success: function (resultText) {
-               
+
                 console.log(resultText);
                 buildTable(resultText);
                 //$('#result').html(resultText);
@@ -169,9 +222,9 @@
 
     }
     function callJqueryAjax() {
-        var date = $('#date').val();
-        var day = $('#day').val();
 
+
+    
 
         $.ajax({
             url: 'OfficeHoursController',
