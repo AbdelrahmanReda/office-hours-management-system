@@ -29,14 +29,20 @@
         <li>
             <a class="Transactins" href="officehourse.jsp">Staff office hours</a>
         </li>
-
-        <%if (session.getAttribute("user_type") == ("staff_member")) {%>
+        
+        <%
+            
+            if (session.getAttribute("user_type").equals("staff_member")) {%>
+        <li>
+            <a class="student" href="StudentController">Students</a>
+        </li>
         <li>
             <a class="reserved-office-hours" href="AppointmentController">Reserved Office Hours</a>
         </li>
         <li>
             <a class="Manage-office-hours" href="manage_office_hours.jsp">Manage office hours</a>
         </li>
+        
 
         <%}%>
     </ul>
