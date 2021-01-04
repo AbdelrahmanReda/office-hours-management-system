@@ -8,22 +8,22 @@
 <%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="staff.OfficeHoursController"%>
+<%@page import="Helpers.SessionController"%>
 <!DOCTYPE html>
 <html>
 
 
     <%@include file="layout/header.jsp" %> 
     <body>
-        <%  response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); %>
+      
         <div class="wrapper">
             <!-- Sidebar  -->
             <%@ include file = "layout\sidebar.jsp" %>
             <!-- Page Content  -->
             <div id="content">
                 <%@ include file = "layout\navbar.jsp" %>
-                <%if (session.getAttribute("email") == null) {
-                        response.sendRedirect("login.jsp");
-                    }%>
+                
+          
 
 
                 <div class="card">
@@ -106,86 +106,58 @@
     </body>
 </html>
 <%@ include file = "layout\scripts.jsp" %>
+<script>  $('.Manage-office-hours').toggleClass('activeElement');</script>
 <script>
-
-
-
     function jsonToURI(p) {
         text = ""
         for (var key in p) {
             if (p.hasOwnProperty(key)) {
                 text = text + key + "=" + p[key] + "&"
-
-
             }
         }
         return text;
     }
-
     function update(id) {
-      
-
         data = {
             operation: "update",
             id: id
         };
-
-       
         $.ajax({
             url: 'OfficeHoursController',
             method: 'POST',
             data: jsonToURI(data),
             success: function (resultText) {
-
                 console.log(resultText);
                 buildTable(resultText);
-                //$('#result').html(resultText);
             },
             error: function (jqXHR, exception) {
                 console.log('Error occured!!');
             }
         });
-
-
-
-
-
     }
     function deleteOfficeHour(id) {
-
         data = {
             operation: "delete",
             id: id
         };
-
-       
         $.ajax({
             url: 'OfficeHoursController',
             method: 'POST',
             data: jsonToURI(data),
             success: function (resultText) {
-
-
                getOfficeHourse();
-                //$('#result').html(resultText);
             },
             error: function (jqXHR, exception) {
                 console.log('Error occured!!');
             }
         });
-
-
-
     }
-
     function buildTable(jsonObject) {
-
         $('#office_hourse_data').empty();
         for (var i = 0; i < jsonObject.length; i++) {
-
             $('#office_hourse_data').append(
                     '<tr> <td>'
-                    + jsonObject[i]['id']
+                    + (i+1)
                     + '</td> <td>'
                     + jsonObject[i]['day']
                     + '</td> <td>'
@@ -193,39 +165,24 @@
                     + '</td> <td> <button type="submit" onclick="deleteOfficeHour(' + jsonObject[i]['id'] + ') " class="btn btn-danger">Delete</button>'
                     + '<button type="submit" onclick="update(' + jsonObject[i]['id'] + ') " class="btn btn-success">Update</button> </td>'
                     + '</tr>'
-
                     );
         }
-
-
-
     }
     getOfficeHourse();
     function getOfficeHourse() {
-      
-
         $.ajax({
             url: 'OfficeHoursController',
             method: 'POST',
             data: $('#select-form').serialize(),
             success: function (resultText) {
-
-                console.log(resultText);
                 buildTable(resultText);
-                //$('#result').html(resultText);
             },
             error: function (jqXHR, exception) {
                 console.log('Error occured!!');
             }
         });
-
-
     }
     function callJqueryAjax() {
-
-
-    
-
         $.ajax({
             url: 'OfficeHoursController',
             method: 'POST',

@@ -44,7 +44,7 @@ public class OfficeHoursController extends HttpServlet {
                 obj.id = rs.getInt("id");
                 obj.staff_id = rs.getInt("staff_id");
                 obj.day = rs.getString("day");
-                obj.time = rs.getTime("time");
+                obj.time = rs.getString("time");
                 officeHours.add(obj);
             }
             return officeHours;
@@ -104,7 +104,7 @@ public class OfficeHoursController extends HttpServlet {
                 obj.id = rs.getInt("id");
                 obj.staff_id = rs.getInt("staff_id");
                 obj.day = rs.getString("day");
-                obj.time = rs.getTime("time");
+                obj.time = rs.getString("time");
                 return obj;
             }
 

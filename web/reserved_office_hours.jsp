@@ -1,29 +1,27 @@
 <%-- 
-    Document   : manage_office_hours
-    Created on : Jan 3, 2021, 2:08:05 PM
+    Document   : reserved_office_hours
+    Created on : Jan 4, 2021, 12:25:29 PM
     Author     : boody
 --%>
 
-<%@page import="Models.OfficeHours"%>
+<%@page import="Models.Appointment"%>
 <%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@page import="staff.OfficeHoursController"%>
-<%@page import="Helpers.SessionController"%>
 <!DOCTYPE html>
 <html>
 
 
     <%@include file="layout/header.jsp" %> 
     <body>
-      
+
         <div class="wrapper">
             <!-- Sidebar  -->
             <%@ include file = "layout\sidebar.jsp" %>
             <!-- Page Content  -->
             <div id="content">
                 <%@ include file = "layout\navbar.jsp" %>
-                
-          
+
+
 
 
                 <div class="card">
@@ -37,19 +35,41 @@
                                 <div class="col-lg-12">
                                     <button type="button" style="float: right" class="btn btn-success btn-xs"  data-toggle="modal" data-target="#exampleModal">Add New Office Hour<span class="glyphicon glyphicon-plus"></span></button>
                                 </div>
-                                <div class="col-lg-12 pt-3">
-                                    <table class="table">
+                                <div class="col-lg-12">
+
+                                    <table id="example" class="table table-striped table-bordered" style="width:100%">
                                         <thead>
                                             <tr>
-                                                <th scope="col">#</th>
-                                                <th scope="col">Day</th>
-                                                <th scope="col">Hour</th>
-                                                <th scope="col">Operation</th>
+                                                <th>#</th>
+                                                <th>Day</th>
+                                                <th>Time</th>
+                                                <th>Student Name</th>
+                                                <th>Student Mail</th>
+                                                <th>Student Level</th>
                                             </tr>
                                         </thead>
-                                        <tbody id="office_hourse_data">
+                                        <tbody>
+                                            <%
+                                                // retrieve your list from the request, with casting 
+                                                ArrayList<Appointment> list = (ArrayList<Appointment>) request.getAttribute("appointments");
+
+                                                // print the information about every category of the list
+                                                for (int i = 0; i < list.size(); i++) {
+                                                    out.print("<tr>");
+                                                    out.print("<td>"+(i+1)+"</td>");
+                                                    out.print("<td>"+list.get(i).officeHours.day+"</td>");
+                                                    out.print("<td>"+list.get(i).officeHours.time+"</td>");
+                                                    out.print("<td>"+list.get(i).student.user_name+"</td>");
+                                                    out.print("<td>"+list.get(i).student.mail+"</td>");
+                                                    out.print("<td>"+list.get(i).student.student_level+"</td>");
+                                                    out.print("</td>");
+
+                                                }
+
+                                            %>  
 
                                         </tbody>
+
                                     </table>
                                 </div>
                             </div>
@@ -106,97 +126,15 @@
     </body>
 </html>
 <%@ include file = "layout\scripts.jsp" %>
-<script>  $('.Manage-office-hours').toggleClass('activeElement');</script>
+
+
+<script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js" ></script>
+<script src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js" ></script>
 <script>
-    function jsonToURI(p) {
-        text = ""
-        for (var key in p) {
-            if (p.hasOwnProperty(key)) {
-                text = text + key + "=" + p[key] + "&"
-            }
-        }
-        return text;
-    }
-    function update(id) {
-        data = {
-            operation: "update",
-            id: id
-        };
-        $.ajax({
-            url: 'OfficeHoursController',
-            method: 'POST',
-            data: jsonToURI(data),
-            success: function (resultText) {
-                console.log(resultText);
-                buildTable(resultText);
-            },
-            error: function (jqXHR, exception) {
-                console.log('Error occured!!');
-            }
-        });
-    }
-    function deleteOfficeHour(id) {
-        data = {
-            operation: "delete",
-            id: id
-        };
-        $.ajax({
-            url: 'OfficeHoursController',
-            method: 'POST',
-            data: jsonToURI(data),
-            success: function (resultText) {
-               getOfficeHourse();
-            },
-            error: function (jqXHR, exception) {
-                console.log('Error occured!!');
-            }
-        });
-    }
-    function buildTable(jsonObject) {
-        $('#office_hourse_data').empty();
-        for (var i = 0; i < jsonObject.length; i++) {
-            $('#office_hourse_data').append(
-                    '<tr> <td>'
-                    + (i+1)
-                    + '</td> <td>'
-                    + jsonObject[i]['day']
-                    + '</td> <td>'
-                    + jsonObject[i]['time']
-                    + '</td> <td> <button type="submit" onclick="deleteOfficeHour(' + jsonObject[i]['id'] + ') " class="btn btn-danger">Delete</button>'
-                    + '<button type="submit" onclick="update(' + jsonObject[i]['id'] + ') " class="btn btn-success">Update</button> </td>'
-                    + '</tr>'
-                    );
-        }
-    }
-    getOfficeHourse();
-    function getOfficeHourse() {
-        $.ajax({
-            url: 'OfficeHoursController',
-            method: 'POST',
-            data: $('#select-form').serialize(),
-            success: function (resultText) {
-                buildTable(resultText);
-            },
-            error: function (jqXHR, exception) {
-                console.log('Error occured!!');
-            }
-        });
-    }
-    function callJqueryAjax() {
-        $.ajax({
-            url: 'OfficeHoursController',
-            method: 'POST',
-            data: $('#registrationForm').serialize(),
-            success: function (resultText) {
-                getOfficeHourse();
-            },
-            error: function (jqXHR, exception) {
-                console.log('Error occured!!');
-            }
-        });
-    }
+                                        $(document).ready(function () {
+                                            $('#example').DataTable();
+                                        });
+
 </script>
-
-
-
+<script>  $('.reserved-office-hours').toggleClass('activeElement');</script>
 

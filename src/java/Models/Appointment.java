@@ -5,16 +5,15 @@
  */
 package Models;
 
-
-
 /**
  *
  * @author boody
  */
-public class OfficeHours {
+public class Appointment {
+
     public int id;
-    public int staff_id;
-    public String day;
-    public String time;
-    
+    public Staff staff =new Staff();
+    public  OfficeHours  officeHours = new OfficeHours();
+    public Student student = new Student();
+
 }

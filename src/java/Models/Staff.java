@@ -5,16 +5,18 @@
  */
 package Models;
 
-
-
 /**
  *
  * @author boody
  */
-public class OfficeHours {
+public class Staff {
+
     public int id;
-    public int staff_id;
-    public String day;
-    public String time;
-    
+    public String user_name;
+    public String mail;
+    public String password;
+    public String gender;
+    public String  country ;
+    public String dapartment;
+
 }
