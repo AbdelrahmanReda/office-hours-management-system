@@ -117,10 +117,7 @@ public class AppointmentController extends HttpServlet {
                     appointment.officeHours.slot.slot_name = rs.getString("slot_name");
                     appointment.officeHours.slot.from_hour = rs.getTime("from_hour");
                     appointment.officeHours.slot.to_hour = rs.getTime("to_hour");
-
-                    //appointment.officeHours.time = rs.getString("time");
                     appointments.add(appointment);
-
                 }
 
                 request.setAttribute("appointments", appointments);

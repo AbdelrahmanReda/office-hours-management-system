@@ -1,4 +1,7 @@
+package Mail;
 
+
+import Mail.MailConfiguration;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -36,51 +39,40 @@ public class sendMessage extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            String url = "jdbc:mysql://localhost:3306/office_hours";
-            Connection con = null;
-            Statement Stmt = null;
-            ResultSet RS = null;
-            boolean status = false;
-
-            try {
-                Class.forName("com.mysql.jdbc.Driver");
-                con = DriverManager.getConnection(url, "root", "1234");
-                Stmt = (Statement) con.createStatement();
-
-                String to = request.getParameter("to");
-                String message = request.getParameter("msg");
-                String subject = request.getParameter("subject");
-                HttpSession session = request.getSession();
-                String from = (String) session.getAttribute("email");
-                String pass = (String) session.getAttribute("password");
-
+               String message ="Hello world";
+                
+                String subject = "msg subject" ;
+                
+                String from = "boodycat009@gmail.com";
+                String pass = "2266554488";
+                 MailConfiguration.SendEmailToStaff(from, "abredafadl@gmail.com", subject, message, pass);
+                 System.out.println("called success");
+                 
                 // List<String> Emails = new ArrayList<String>();
-                RS = Stmt.executeQuery("SELECT * FROM student where email ='" + to + "' ");
-                status = RS.next();
+//                RS = Stmt.executeQuery("SELECT * FROM student where email ='" + to + "' ");
+//                status = RS.next();
 
-                if (status) {
+//                if (status) {
+//
+//                  
+//
+//                    String line = "INSERT INTO message VALUES("
+//                            + "'" + from + "',"
+//                            + "'" + to + "',"
+//                            + "'" + message + "',"
+//                            + "'" + subject + "') ";
+//                    int Rows = Stmt.executeUpdate(line);
+//                    Stmt.close();
+//                } else {
+//                    out.println("<script type=\"text/javascript\">");
+//                    out.println("alert('Email You Want To Sent Does Not Exist');");
+//                    out.println("location='sendMessage.html';");
+//                    out.println("</script>");
+//                    //RequestDispatcher rd = request.getRequestDispatcher("sendMessage");
+//                    //rd.forward(request, response);
+//                }
 
-                    sendGenerate.SendEmailToStaff(from, to, subject, message, pass);
-
-                    String line = "INSERT INTO message VALUES("
-                            + "'" + from + "',"
-                            + "'" + to + "',"
-                            + "'" + message + "',"
-                            + "'" + subject + "') ";
-                    int Rows = Stmt.executeUpdate(line);
-                    Stmt.close();
-                } else {
-                    out.println("<script type=\"text/javascript\">");
-                    out.println("alert('Email You Want To Sent Does Not Exist');");
-                    out.println("location='sendMessage.html';");
-                    out.println("</script>");
-                    //RequestDispatcher rd = request.getRequestDispatcher("sendMessage");
-                    //rd.forward(request, response);
-                }
-
-            } catch (Exception e) {
-
-            }
+           
         }
     }
 

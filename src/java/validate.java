@@ -69,14 +69,12 @@ public class validate extends HttpServlet {
                 boolean notExists = true;
                 while (rs.next()) {
                     notExists = false;
-
                     out.print(rs.getString("user_name"));
                     out.print(rs.getString("mail"));
                     out.print(rs.getString("gender"));
                     String user_name = rs.getString("user_name");
                     int id=rs.getInt("id");
                     HttpSession session = request.getSession();
-
                     session.setAttribute("email", email);
                     session.setAttribute("id", id);
                     session.setAttribute("username", user_name);

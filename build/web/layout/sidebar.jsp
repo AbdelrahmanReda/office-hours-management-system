@@ -42,6 +42,10 @@
         <li>
             <a class="Manage-office-hours" href="manage_office_hours.jsp">Manage office hours</a>
         </li>
+        <li>
+            <a class="compose-mail" href="MailController">Compose Mail</a>
+        </li>
+       
         
 
         <%}%>

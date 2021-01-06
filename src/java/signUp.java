@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 
+import Mail.MailConfiguration;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -37,9 +38,9 @@ public class signUp extends HttpServlet {
             String gender = request.getParameter("gender");
             String country = request.getParameter("Country");
 
-            char[] password = sendGenerate.generatePassword(10);
+            char[] password = MailConfiguration.generatePassword(10);
             String pass = String.valueOf(password);
-            sendGenerate.SendEmail(pass,email);
+            MailConfiguration.SendEmail(pass,email);
             
             String url = "jdbc:mysql://localhost:3306/office_hours";
             Connection con = null;
