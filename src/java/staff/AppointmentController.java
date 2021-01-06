@@ -29,6 +29,51 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(name = "AppointmentController", urlPatterns = {"/AppointmentController"})
 public class AppointmentController extends HttpServlet {
 
+    public static boolean isNumeric(String str) {
+        try {
+            Double.parseDouble(str);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+  
+
+    public void delteAppointment(HttpServletRequest request) {
+        if (isNumeric(request.getParameter("reservation_id"))) {
+            try {
+                System.out.println("it is number");
+                Integer id = Integer.parseInt(request.getParameter("reservation_id"));
+                PreparedStatement stm = DatabaseConnector.getConnection().prepareStatement("DELETE FROM appointment where id  =  ?");
+                stm.setInt(1, id);
+                stm.executeUpdate();
+            } catch (SQLException ex) {
+                Logger.getLogger(AppointmentController.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(AppointmentController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        } else {
+            System.out.println("it is a day");
+            String day = request.getParameter("reservation_id");
+            try {
+                PreparedStatement stm = DatabaseConnector.getConnection().prepareStatement("DELETE  FROM  appointment WHERE id IN (\n"
+                        + "SELECT appointment.id FROM appointment\n"
+                        + "INNER JOIN office_hours ON appointment.office_hour_id = office_hours.id\n"
+                        + "INNER JOIN staff  ON appointment.staff_id = staff.id\n"
+                        + "INNER JOIN slot ON office_hours.slot = slot.id\n"
+                        + "INNER JOIN student ON appointment.student_id = student.id WHERE office_hours.day=?)");
+                stm.setString(1, day);
+                stm.executeUpdate();
+
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(AppointmentController.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (SQLException ex) {
+                Logger.getLogger(AppointmentController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -42,6 +87,14 @@ public class AppointmentController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
+            if (request.getParameter("operation") != null) {
+                System.out.println("wala ana hena 1");
+                if (request.getParameter("operation").equals("delete")) {
+                    delteAppointment(request);
+                }
+            }
+
+            System.err.println(SessionController.getSessionAtrributeValue(request, "id"));
 
             ArrayList<Appointment> appointments = new ArrayList<>();
 
@@ -50,18 +103,22 @@ public class AppointmentController extends HttpServlet {
                 PreparedStatement stm = DatabaseConnector.getConnection().prepareStatement("SELECT * FROM appointment\n"
                         + "INNER JOIN office_hours on appointment.office_hour_id = office_hours.id\n"
                         + "INNER JOIN staff  on appointment.staff_id = staff.id\n"
-                        + "INNER JOIN student on appointment.student_id = student.id WHERE appointment.staff_id=?");
+                        + "INNER JOIN slot ON office_hours.slot = slot.id\n"
+                        + "INNER JOIN student on appointment.student_id = student.id WHERE appointment.staff_id=?;");
                 stm.setInt(1, Integer.parseInt(SessionController.getSessionAtrributeValue(request, "id").toString()));
                 ResultSet rs = stm.executeQuery();
                 while (rs.next()) {
                     Appointment appointment = new Appointment();
-
+                    appointment.id = rs.getInt("appointment.id");
                     appointment.student.user_name = rs.getString("student.user_name");
                     appointment.student.mail = rs.getString("student.mail");
                     appointment.student.student_level = rs.getInt("student_level");
                     appointment.officeHours.day = rs.getString("day");
-                    appointment.officeHours.time = rs.getString("time");
+                    appointment.officeHours.slot.slot_name = rs.getString("slot_name");
+                    appointment.officeHours.slot.from_hour = rs.getTime("from_hour");
+                    appointment.officeHours.slot.to_hour = rs.getTime("to_hour");
 
+                    //appointment.officeHours.time = rs.getString("time");
                     appointments.add(appointment);
 
                 }
@@ -89,7 +146,9 @@ public class AppointmentController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
         processRequest(request, response);
+        System.err.println(SessionController.getSessionAtrributeValue(request, "id"));
     }
 
     /**

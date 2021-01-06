@@ -73,12 +73,12 @@ a:focus {
 
 #sidebar .sidebar-header {
     padding: 20px;
-  
+
 }
 
 #sidebar ul.components {
     padding: 20px 0;
-    
+
 }
 
 #sidebar ul p {
@@ -147,7 +147,7 @@ a.article:hover {
 
 #content {
     width: calc(100% - 250px);
-    padding: 40px;
+    padding: 20px;
     min-height: 100vh;
     transition: all 0.3s;
     position: absolute;
@@ -157,7 +157,7 @@ a.article:hover {
 
 #content.active {
     width: 100%;
-    
+
 }
 
 /* ---------------------------------------------------
@@ -183,64 +183,64 @@ a.article:hover {
 }
 
 
- /*change this settings in the bootstrap css*/
+/*change this settings in the bootstrap css*/
 
 .alert{
-  padding: 0px !important;
-  border-radius:0 !important;
+    padding: 0px !important;
+    border-radius:0 !important;
 }
 
 .alert-dismissable {
-  padding-right: 24px !important;
+    padding-right: 24px !important;
 }
 
 .alertwrapper{
-  border-radius: 0;
+    border-radius: 0;
 }
 
 .alerticon{
-  font-size: 2em;
-  float: left;
-  margin-right: 0.5em;
-  padding: 0.5em;
+    font-size: 2em;
+    float: left;
+    margin-right: 0.5em;
+    padding: 0.5em;
 }
 
- .successful{
-  background-color: #D6E9C6;
-  }
+.successful{
+    background-color: #D6E9C6;
+}
 
- .dangerous{
-  background-color: #EBCCD1;
-  }
+.dangerous{
+    background-color: #EBCCD1;
+}
 
 .alertcontent{
-  padding: 0.5em;
-  overflow: hidden;
+    padding: 0.5em;
+    overflow: hidden;
 }
 
 body {
-  background: #f2f2f2;
+    background: #f2f2f2;
 }
 
 .navbar .nav-item:not(:last-child) {
-  margin-right: 35px;
+    margin-right: 35px;
 }
 
 .dropdown-toggle::after {
-   transition: transform 0.15s linear; 
+    transition: transform 0.15s linear; 
 }
 
 .show.dropdown .dropdown-toggle::after {
-  transform: translateY(3px);
+    transform: translateY(3px);
 }
 
 
 
 .login-form{
-        max-width: 496px;
+    max-width: 496px;
     margin: 0 auto;
     background-color: white;
-       padding: 20px;
+    padding: 20px;
     border: 1px solid #ced4da;
     border-radius: 10px;
 }
@@ -248,7 +248,7 @@ body {
     background-color: white !important;
 }
 .alert-warning{
-        border-left: 5px solid #ffc718;
+    border-left: 5px solid #ffc718;
 }
 
 .card{
@@ -261,8 +261,22 @@ body {
 }
 
 @media (min-width: 768px){
-.navbar-expand-md .navbar-nav .dropdown-menu {
-    position: absolute;
-    left: -88px !important;
+    .navbar-expand-md .navbar-nav .dropdown-menu {
+        position: absolute;
+        left: -88px !important;
+    }
 }
+
+#example_filter{
+    display: flex;
+    justify-content: flex-end;
+}
+.pagination{
+    justify-content: flex-end;
+}
+
+.btn-success {
+    color: #fff;
+    background-color: #05bf30;
+    border-color: #00c52d;
 }

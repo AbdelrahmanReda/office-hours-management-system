@@ -13,7 +13,7 @@ public class Appointment {
 
     public int id;
     public Staff staff =new Staff();
-    public  OfficeHours  officeHours = new OfficeHours();
+    public OfficeHours  officeHours = new OfficeHours();
     public Student student = new Student();
 
 }

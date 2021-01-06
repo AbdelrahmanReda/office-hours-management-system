@@ -15,6 +15,8 @@ public class OfficeHours {
     public int id;
     public int staff_id;
     public String day;
-    public String time;
+    public Slot slot = new Slot();
+    
+    
     
 }

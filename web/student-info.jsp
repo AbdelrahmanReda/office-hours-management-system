@@ -7,21 +7,14 @@
 <%@page language="java" contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
-
-
     <%@include file="layout/header.jsp" %> 
     <body>
-
         <div class="wrapper">
             <!-- Sidebar  -->
             <%@ include file = "layout\sidebar.jsp" %>
             <!-- Page Content  -->
             <div id="content">
                 <%@ include file = "layout\navbar.jsp" %>
-
-
-
-
                 <div class="card">
                     <div class="card-header">
                         <form id="select-form"><input type="hidden" name="operation" value="selection" ></form>
@@ -47,16 +40,9 @@
                                                 <button type="submit" class="btn btn-primary">Search for Student</button>
                                             </form>
                                         </div>
-
                                     </div>
                                 </div>
-
                                 <div class="" > </div>
-
-
-
-
-
                                 <div class="col-lg-12 mt-4">
                                     <div class="card">
                                         <div class="card-header">
@@ -107,11 +93,8 @@
                                                 <option>Wednesday</option>
                                                 <option>Thursday</option>
                                                 <option>Friday</option>
-
                                             </select>
                                         </div>
-
-
                                     </form>
                                 </div>
                                 <div class="modal-footer">

@@ -32,8 +32,34 @@
                     <div class="card-body">
                         <div class="container-fluid" >
                             <div class="row" >
-                                <div class="col-lg-12">
-                                    <button type="button" style="float: right" class="btn btn-success btn-xs"  data-toggle="modal" data-target="#exampleModal">Add New Office Hour<span class="glyphicon glyphicon-plus"></span></button>
+                                <div class="col-lg-12" >
+                                    <form class="needs-validation" action="AppointmentController" method="POST" >
+                                        <div class="form-row">
+                                            <div class="col-md-9 mb-3">
+                                                <label for="exampleFormControlSelect1">Reservation day</label>
+                                                <select class="form-control"  name="reservation_id" id="day">
+                                                    <option>Saturday</option>
+                                                    <option>Sunday</option>
+                                                    <option>Monday</option>
+                                                    <option>Tuesday</option>
+                                                    <option>Wednesday</option>
+                                                    <option>Thursday</option>
+                                                    <option>Friday</option>
+
+                                                </select>
+                                            </div>
+
+                                            <div class="col-md-3 mb-3" style="display: flex; flex-direction: column-reverse;">
+                                                <input type="hidden" name="operation" value="delete">
+                                                <button class="btn btn-danger" type="submit">Cancel Reservation</button>
+
+
+                                            </div>
+
+                                        </div>
+
+
+                                    </form> 
                                 </div>
                                 <div class="col-lg-12">
 
@@ -42,10 +68,13 @@
                                             <tr>
                                                 <th>#</th>
                                                 <th>Day</th>
-                                                <th>Time</th>
-                                                <th>Student Name</th>
+                                                <th>Slot</th>
+                                                <th>from</th>
+                                                <th>to</th>
+                                                <th>Student</th>
                                                 <th>Student Mail</th>
-                                                <th>Student Level</th>
+                                                <th>Level</th>
+                                                <th>Operation</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -56,17 +85,27 @@
                                                 // print the information about every category of the list
                                                 for (int i = 0; i < list.size(); i++) {
                                                     out.print("<tr>");
-                                                    out.print("<td>"+(i+1)+"</td>");
-                                                    out.print("<td>"+list.get(i).officeHours.day+"</td>");
-                                                    out.print("<td>"+list.get(i).officeHours.time+"</td>");
-                                                    out.print("<td>"+list.get(i).student.user_name+"</td>");
-                                                    out.print("<td>"+list.get(i).student.mail+"</td>");
-                                                    out.print("<td>"+list.get(i).student.student_level+"</td>");
-                                                    out.print("</td>");
+                                                    out.print("<td>" + (i + 1) + "</td>");
+                                                    out.print("<td>" + list.get(i).officeHours.day + "</td>");
+                                                    out.print("<td>" + list.get(i).officeHours.slot.slot_name + "</td>");
+                                                    out.print("<td>" + list.get(i).officeHours.slot.from_hour + "</td>");
+                                                    out.print("<td>" + list.get(i).officeHours.slot.to_hour + "</td>");
+                                                    out.print("<td>" + list.get(i).student.user_name + "</td>");
+                                                    out.print("<td>" + list.get(i).student.mail + "</td>");
+                                                    out.print("<td>" + list.get(i).student.student_level + "</td>");
+                                                    out.print("<td> "); %>
+                                        <form action="AppointmentController" method="POST" style="display: flex; justify-content: center;">
+                                            <input type="hidden" name="operation" value="delete">
+                                            <input type="hidden" name="reservation_id" value= <% out.print(list.get(i).id); %> >
+                                            <button class="btn btn-danger" > Delete </button>
+                                        </form>
 
-                                                }
+                                        <%
+                                                out.print("</td> </td>");
 
-                                            %>  
+                                            }
+
+                                        %>  
 
                                         </tbody>
 

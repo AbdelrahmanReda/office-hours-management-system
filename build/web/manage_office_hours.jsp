@@ -15,15 +15,15 @@
 
     <%@include file="layout/header.jsp" %> 
     <body>
-      
+
         <div class="wrapper">
             <!-- Sidebar  -->
             <%@ include file = "layout\sidebar.jsp" %>
             <!-- Page Content  -->
             <div id="content">
                 <%@ include file = "layout\navbar.jsp" %>
-                
-          
+
+
 
 
                 <div class="card">
@@ -43,8 +43,12 @@
                                             <tr>
                                                 <th scope="col">#</th>
                                                 <th scope="col">Day</th>
-                                                <th scope="col">Hour</th>
+                                                <th scope="col">Slot</th>
+                                                <th scope="col">From</th>
+                                                <th scope="col">To</th>
                                                 <th scope="col">Operation</th>
+
+
                                             </tr>
                                         </thead>
                                         <tbody id="office_hourse_data">
@@ -70,14 +74,19 @@
                                 <div class="modal-body">
                                     <form id="registrationForm">
                                         <input type="hidden" name="operation" value="insertion">
-                                        <div class="form-group row">
-                                            <label for="example-time-input" class="col-2 col-form-label">Time</label>
-                                            <div class="col-12">
-                                                <input class="form-control" name="time" type="time" value="13:45:00" id="date">
-                                            </div>
+                                        <div class="form-group">
+                                            <label for="day">Slot</label>
+                                            <select class="form-control"  name="slot" id="day">
+                                                <option value="1">First Slot</option>
+                                                <option value="2">Second Slot</option>
+                                                <option value="3">Third Slot</option>
+                                                <option value="4" >Fourth Slot</option>
+
+
+                                            </select>
                                         </div>
                                         <div class="form-group">
-                                            <label for="day">Example select</label>
+                                            <label for="day">Day</label>
                                             <select class="form-control"  name="day" id="day">
                                                 <option>Saturday</option>
                                                 <option>Sunday</option>
@@ -145,7 +154,7 @@
             method: 'POST',
             data: jsonToURI(data),
             success: function (resultText) {
-               getOfficeHourse();
+                getOfficeHourse();
             },
             error: function (jqXHR, exception) {
                 console.log('Error occured!!');
@@ -157,12 +166,17 @@
         for (var i = 0; i < jsonObject.length; i++) {
             $('#office_hourse_data').append(
                     '<tr> <td>'
-                    + (i+1)
+                    + (i + 1)
                     + '</td> <td>'
                     + jsonObject[i]['day']
                     + '</td> <td>'
-                    + jsonObject[i]['time']
-                    + '</td> <td> <button type="submit" onclick="deleteOfficeHour(' + jsonObject[i]['id'] + ') " class="btn btn-danger">Delete</button>'
+                    + jsonObject[i]['slot']['slot_name']
+                    + '</td> <td>'
+                    + jsonObject[i]['slot']['from_hour']
+                    + '</td> <td>'
+                    + jsonObject[i]['slot']['to_hour']
+                    + '</td> <td style = \"display: flex; justify-content: space-evenly;\" >'
+                    + '<button type="submit" onclick="deleteOfficeHour(' + jsonObject[i]['id'] + ') " class="btn btn-danger">Delete</button>'
                     + '<button type="submit" onclick="update(' + jsonObject[i]['id'] + ') " class="btn btn-success">Update</button> </td>'
                     + '</tr>'
                     );

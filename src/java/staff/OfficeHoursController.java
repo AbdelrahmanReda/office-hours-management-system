@@ -36,7 +36,7 @@ public class OfficeHoursController extends HttpServlet {
     public ArrayList<OfficeHours> getOfficeHourse(HttpServletRequest request) {
         try {
             ArrayList<OfficeHours> officeHours = new ArrayList<>();
-            PreparedStatement stmt = DatabaseConnector.getConnection().prepareStatement("SELECT * FROM office_hours WHERE staff_id=?");
+            PreparedStatement stmt = DatabaseConnector.getConnection().prepareStatement("SELECT * FROM office_hours INNER JOIN slot on  office_hours.slot = slot.id  WHERE staff_id=?");
             stmt.setInt(1, Integer.parseInt(SessionController.getSessionAtrributeValue(request, "id")));
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
@@ -44,7 +44,11 @@ public class OfficeHoursController extends HttpServlet {
                 obj.id = rs.getInt("id");
                 obj.staff_id = rs.getInt("staff_id");
                 obj.day = rs.getString("day");
-                obj.time = rs.getString("time");
+                obj.slot.slot_name=rs.getString("slot_name");
+                obj.slot.from_hour=rs.getTime("from_hour");
+                obj.slot.to_hour=rs.getTime("to_hour");
+                
+              
                 officeHours.add(obj);
             }
             return officeHours;
@@ -60,12 +64,12 @@ public class OfficeHoursController extends HttpServlet {
     public void insertOfficeHour(HttpServletRequest request) {
 
         System.out.println("day is " + request.getParameter("day"));
-        System.out.println("time is " + request.getParameter("time"));
+        System.out.println("time is " + request.getParameter("slot"));
         try {
             PreparedStatement stmt = DatabaseConnector.getConnection().prepareStatement("INSERT  INTO  office_hours VALUES (DEFAULT,?,?,?)");
             stmt.setInt(1, Integer.parseInt(SessionController.getSessionAtrributeValue(request, "id")));
             stmt.setString(2, request.getParameter("day"));
-            stmt.setString(3, request.getParameter("time"));
+            stmt.setString(3, request.getParameter("slot"));
             stmt.executeUpdate();
 
         } catch (ClassNotFoundException ex) {
@@ -104,7 +108,7 @@ public class OfficeHoursController extends HttpServlet {
                 obj.id = rs.getInt("id");
                 obj.staff_id = rs.getInt("staff_id");
                 obj.day = rs.getString("day");
-                obj.time = rs.getString("time");
+                //obj.time = rs.getString("time");
                 return obj;
             }
 
