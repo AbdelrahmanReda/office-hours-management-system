@@ -16,6 +16,7 @@ public class SessionController {
 
     public static String getSessionAtrributeValue(HttpServletRequest request, String attribute) {
         HttpSession session = request.getSession();
+        System.out.println("i am returning from session "+attribute+"   "+session.getAttribute(attribute).toString() );
         return session.getAttribute(attribute).toString();
 
     }

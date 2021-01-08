@@ -32,7 +32,7 @@ public class validate extends HttpServlet {
             String email = request.getParameter("email");
             String pass = request.getParameter("password");
             String type = request.getParameter("user_type");
-
+            System.out.println("type is "+type);
             if (type.equals("student")) {
 
                 PreparedStatement stmt = DatabaseConnector.getConnection().prepareStatement("SELECT * FROM student WHERE student.mail = ? AND student.password = ?");

@@ -7,12 +7,14 @@ package Mail;
 
 import Helpers.DatabaseConnector;
 import Helpers.SessionController;
+import Models.Message;
+import Models.UserMessage;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -20,19 +22,51 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author boody
  */
-@WebServlet(name = "MailController", urlPatterns = {"/MailController"})
+@WebServlet(name = "InboxController", urlPatterns = {"/InboxController/*"})
+public class InboxController extends HttpServlet {
 
-public class MailController extends HttpServlet {
+    private ArrayList<UserMessage> getConverations(HttpServletRequest request) {
 
-    public static void hello() {
-        System.out.println("Hello wordl fom1");
+        try {
+            PreparedStatement stm = DatabaseConnector.getConnection().prepareStatement("SELECT * FROM conversation\n"
+                    + "    INNER JOIN user_message  on conversation.id = conversation_id\n"
+                    + "    INNER JOIN message  on user_message.message_id = message.id\n"
+                    + "    WHERE sender_id=? OR recipient_id = ? ORDER BY created_at DESC LIMIT 1;");
 
+            stm.setString(1, SessionController.getSessionAtrributeValue(request, "email"));
+            stm.setString(2, SessionController.getSessionAtrributeValue(request, "email"));
+            
+            ResultSet rs = stm.executeQuery();
+            /*
+            
+            ...to be continued
+            */
+            ArrayList<UserMessage> messages = new ArrayList<>();
+            while (rs.next()) {
+                UserMessage obj = new UserMessage();
+                obj.conversation.subject=rs.getString("subject");
+                obj.message.messageBoody=rs.getString("message");
+                obj.message.create_at=rs.getTimestamp("created_at");
+                System.out.println("subject is"+obj.conversation.subject);
+                System.out.println("messeage is is"+obj.message.messageBoody);
+                System.out.println("messeage sent at"+ obj.message.create_at);
+                messages.add(obj);
+                
+                
+            }
+            return messages;
+
+        } catch (SQLException ex) {
+            Logger.getLogger(InboxController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(InboxController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 
     /**
@@ -44,62 +78,14 @@ public class MailController extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    private void getMail(HttpServletRequest request) {
-        String email = SessionController.getSessionAtrributeValue(request, "email");
-
-    }
-
-    private void storeMessage(String message, String subject, String recipients, HttpServletRequest request) {
-
-        try {
-            PreparedStatement stm = DatabaseConnector.getConnection().prepareStatement("INSERT INTO message VALUES (DEFAULT,?,?,DEFAULT)", Statement.RETURN_GENERATED_KEYS);
-            stm.setString(1, subject);
-            stm.setString(2, message);
-
-            stm.executeUpdate();
-
-            int id = 0;
-
-            HttpSession s = request.getSession();
-            stm = DatabaseConnector.getConnection().prepareStatement("INSERT INTO  user_message VALUES  (DEFAULT,?,?,?)");
-            stm.setInt(1, 5);
-            stm.setString(2, SessionController.getSessionAtrributeValue(request, "email"));
-            stm.setString(3, recipients);
-            stm.executeUpdate();
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(MailController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
-            Logger.getLogger(MailController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-    }
-
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            System.out.println("sau something great");
-            if (request.getParameter("recipients") != null) {
-
-                String message = request.getParameter("message");
-                String subject = request.getParameter("subject");
-                String recipients = request.getParameter("recipients");
-
-                System.out.println("message " + message);
-                System.out.println("subject " + subject);
-                System.out.println("recipients " + recipients);
-
-                String from = "boodycat009@gmail.com";
-                String pass = "2266554488";
-                MailConfiguration.SendEmailToStaff(from, recipients, subject, message, pass);
-
-                request.setAttribute("status", "success");
-                request.getRequestDispatcher("compose_mail.jsp").forward(request, response);
-                storeMessage(message, subject, recipients, request);
-                System.out.println("called success");
-
-            }
-
+            /* TODO output your page here. You may use following sample code. */
+           
+            request.setAttribute("conversations",  getConverations(request));
+            request.getRequestDispatcher("inbox.jsp").forward(request, response);
         }
     }
 
@@ -115,8 +101,8 @@ public class MailController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-        request.getRequestDispatcher("compose_mail.jsp").forward(request, response);
+        
+        System.out.println(">>>>>>>>>>><><>"+request.getParameter("todo"));
         processRequest(request, response);
     }
 

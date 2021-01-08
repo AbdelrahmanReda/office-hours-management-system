@@ -45,6 +45,10 @@
         <li>
             <a class="compose-mail" href="MailController">Compose Mail</a>
         </li>
+        
+         <li>
+            <a class="inbox" href="InboxController">Inbox</a>
+        </li>
        
         
 

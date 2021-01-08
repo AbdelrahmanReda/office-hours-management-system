@@ -8,14 +8,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
-
-
-
     <%@include file="layout/header.jsp" %> 
-
-
-
-
     <body>
         <%  response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); %>
 
@@ -25,7 +18,6 @@
             <!-- Page Content  -->
             <div id="content">
                 <%@ include file = "layout\navbar.jsp" %>
-
                 <%     if (session.getAttribute("email") == null) {
                         response.sendRedirect("login.jsp");
                     }
@@ -34,10 +26,7 @@
                             out.print("<script> swal(\"Good job!\", \"You clicked the button!\", \"success\")</script>");
                         }
                     }
-
                 %>
-
-
 
                 <div class="card">
                     <div class="card-header">
