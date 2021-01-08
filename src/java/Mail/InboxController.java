@@ -30,6 +30,32 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(name = "InboxController", urlPatterns = {"/InboxController/*"})
 public class InboxController extends HttpServlet {
 
+    private ArrayList<UserMessage> showMesseages(int conversationId) throws SQLException {
+        ArrayList<UserMessage> messages = new ArrayList<>();
+        try {
+            PreparedStatement stm = DatabaseConnector.getConnection().prepareStatement("SELECT * FROM  message\n"
+                    + "    INNER JOIN user_message on message.id = message_id\n"
+                    + "    INNER JOIN conversation on user_message.conversation_id = conversation.id\n"
+                    + "    WHERE conversation_id = ? ORDER BY created_at ASC;");
+
+            stm.setInt(1, conversationId);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                UserMessage obj = new UserMessage();
+                obj.message.messageBoody = rs.getString("message");
+                obj.message.create_at = rs.getTimestamp("created_at");
+                obj.sender = rs.getNString("sender_id");
+                obj.conversation.subject = rs.getString("subject");
+                messages.add(obj);
+            }
+            return messages;
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(InboxController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+
+    }
+
     private ArrayList<UserMessage> getConverations(HttpServletRequest request) {
 
         try {
@@ -68,9 +94,9 @@ public class InboxController extends HttpServlet {
                 stm.setInt(1, messages.get(i).conversation.id);
                 rs = stm.executeQuery();
                 while (rs.next()) {
-                    messages.get(i).message.messageBoody=rs.getString("message");
-                    messages.get(i).message.create_at=rs.getTimestamp("created_at");
-                    messages.get(i).recipent=rs.getString("sender_id");
+                    messages.get(i).message.messageBoody = rs.getString("message");
+                    messages.get(i).message.create_at = rs.getTimestamp("created_at");
+                    messages.get(i).sender = rs.getString("sender_id");
                 }
 
             }
@@ -99,9 +125,23 @@ public class InboxController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
+            System.out.println(">>>>>>>>>>><><>" + request.getParameter("conversation_id"));
 
-            request.setAttribute("conversations", getConverations(request));
+            if (request.getParameter("conversation_id") != null) {
+               
+                request.setAttribute("conversation",  showMesseages(Integer.parseInt(request.getParameter("conversation_id"))));
+                request.getRequestDispatcher("coversation.jsp").forward(request, response);
+            }
+            else
+            {
+                  request.setAttribute("conversations", getConverations(request));
             request.getRequestDispatcher("inbox.jsp").forward(request, response);
+                
+            }
+
+          
+        } catch (SQLException ex) {
+            Logger.getLogger(InboxController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -118,7 +158,6 @@ public class InboxController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        System.out.println(">>>>>>>>>>><><>" + request.getParameter("conversation_id"));
         processRequest(request, response);
     }
 

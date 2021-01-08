@@ -37,7 +37,7 @@
                         <div class="col-lg-12 p-0">
                             <div class="card">
                                 <div class="card-header">
-                                    <h3>Primary Mails</h3>
+                                    <h3>Primary Mails</h3>  
                                 </div>
                                 <div class="card-body">
                                               <div class="list-group overflow-auto" >
@@ -59,7 +59,7 @@
                                             out.print("<small>"+list.get(i).message.create_at+"</small>");
                                             out.print("</div>");
                                             out.print("<p class=\"mb-1\">" + list.get(i).message.messageBoody + "</p>");
-                                            out.print(" <small> <span class=\"badge badge-primary\">Sent From > </span> "+list.get(i).recipent+"</small></a>");
+                                            out.print(" <small> <span class=\"badge badge-primary\">Sent From > </span> "+list.get(i).sender+"</small></a>");
 
 
                                         %>

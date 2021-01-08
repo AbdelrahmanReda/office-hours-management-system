@@ -5,6 +5,8 @@
  */
 package Models;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author boody
@@ -14,7 +16,7 @@ public class UserMessage {
     public int id;
     public Message message = new Message();
     public Conversation conversation = new Conversation();
-    public String recipent;
-    public String reciever;
+    public String sender;
+    public String recipients;
 
 }
