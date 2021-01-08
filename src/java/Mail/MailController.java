@@ -52,20 +52,48 @@ public class MailController extends HttpServlet {
     private void storeMessage(String message, String subject, String recipients, HttpServletRequest request) {
 
         try {
-            PreparedStatement stm = DatabaseConnector.getConnection().prepareStatement("INSERT INTO message VALUES (DEFAULT,?,?,DEFAULT)", Statement.RETURN_GENERATED_KEYS);
+            int generatedConversationId = -1;
+            int generatedMessageId=-1;
+            PreparedStatement stm = DatabaseConnector.getConnection().prepareStatement("INSERT INTO conversation VALUES (DEFAULT,?)", Statement.RETURN_GENERATED_KEYS);
             stm.setString(1, subject);
-            stm.setString(2, message);
+            stm.executeUpdate();
+            
+
+            try (ResultSet generatedKeys = stm.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                   generatedConversationId = (int)generatedKeys.getLong(1);
+                } else {
+                    throw new SQLException("Creating user failed, no ID obtained.");
+                }
+            }
+            
+
+            
+            stm = DatabaseConnector.getConnection().prepareStatement("INSERT INTO message VALUES (DEFAULT,?,DEFAULT)", Statement.RETURN_GENERATED_KEYS);
+    
+            stm.setString(1, message);
 
             stm.executeUpdate();
 
-            int id = 0;
+           
+            try (ResultSet generatedKeys = stm.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                   generatedMessageId = (int)generatedKeys.getLong(1);
+                } else {
+                    throw new SQLException("Creating user failed, no ID obtained.");
+                }
+            }
+            
 
-            HttpSession s = request.getSession();
-            stm = DatabaseConnector.getConnection().prepareStatement("INSERT INTO  user_message VALUES  (DEFAULT,?,?,?)");
-            stm.setInt(1, 5);
-            stm.setString(2, SessionController.getSessionAtrributeValue(request, "email"));
-            stm.setString(3, recipients);
+            stm = DatabaseConnector.getConnection().prepareStatement("INSERT INTO  user_message VALUES  (DEFAULT,?,?,?,?)");
+            stm.setInt(1, generatedMessageId);
+            stm.setInt(2, generatedConversationId);
+            stm.setString(3, SessionController.getSessionAtrributeValue(request, "email"));
+            stm.setString(4, recipients);
             stm.executeUpdate();
+            
+            
+            
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(MailController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {

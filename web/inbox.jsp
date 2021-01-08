@@ -35,9 +35,12 @@
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-lg-12 p-0">
-                            <a href="${pageContext.request.contextPath}/InboxController?todo=show_article&article_id=23">link</a>
-
-                            <div class="list-group overflow-auto" style="height:720px" >
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3>Primary Mails</h3>
+                                </div>
+                                <div class="card-body">
+                                              <div class="list-group overflow-auto" >
 
 
                                 <%
@@ -45,17 +48,18 @@
                                     ArrayList<Models.UserMessage> list = (ArrayList<Models.UserMessage>) request.getAttribute("conversations");
                                     for (int i = 0; i < list.size(); i++) {
                                 %>
-                                <a href="InboxController/5" class="list-group-item list-group-item-action flex-column align-items-start">
+                                <a href="${pageContext.request.contextPath}/InboxController?conversation_id=<% out.print(list.get(i).conversation.id);%>" class="list-group-item list-group-item-action flex-column align-items-start">
                                     <div class="d-flex w-100 justify-content-between">
-
-
+                                            
+                                        
 
                                         <%
+                                               
                                             out.print("<h5 class=\"mb-1\">" + list.get(i).conversation.subject + "</h5>   ");
-                                            out.print("<small>3 days ago</small>");
+                                            out.print("<small>"+list.get(i).message.create_at+"</small>");
                                             out.print("</div>");
                                             out.print("<p class=\"mb-1\">" + list.get(i).message.messageBoody + "</p>");
-                                            out.print(" <small></small></a>");
+                                            out.print(" <small> <span class=\"badge badge-primary\">Sent From > </span> "+list.get(i).recipent+"</small></a>");
 
 
                                         %>
@@ -65,6 +69,11 @@
 
                                     </div>
                             </div>
+                                </div>
+                            </div>
+                           
+
+                  
                         </div>
                     </div>
                 </div>

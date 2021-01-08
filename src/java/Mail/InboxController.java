@@ -33,32 +33,48 @@ public class InboxController extends HttpServlet {
     private ArrayList<UserMessage> getConverations(HttpServletRequest request) {
 
         try {
-            PreparedStatement stm = DatabaseConnector.getConnection().prepareStatement("SELECT * FROM conversation\n"
+            ArrayList<UserMessage> messages = new ArrayList<>();
+
+            /**
+             * Get conversation id and conversation subject
+             */
+            PreparedStatement stm = DatabaseConnector.getConnection().prepareStatement("SELECT conversation_id ,subject ,  MAX(created_at) as 'created_at' FROM conversation\n"
                     + "    INNER JOIN user_message  on conversation.id = conversation_id\n"
                     + "    INNER JOIN message  on user_message.message_id = message.id\n"
-                    + "    WHERE sender_id=? OR recipient_id = ? ORDER BY created_at DESC LIMIT 1;");
+                    + "     WHERE sender_id=? OR recipient_id = ? GROUP BY conversation_id , subject  ORDER BY created_at DESC");
 
             stm.setString(1, SessionController.getSessionAtrributeValue(request, "email"));
             stm.setString(2, SessionController.getSessionAtrributeValue(request, "email"));
-            
+
             ResultSet rs = stm.executeQuery();
             /*
             
             ...to be continued
-            */
-            ArrayList<UserMessage> messages = new ArrayList<>();
+             */
+
             while (rs.next()) {
                 UserMessage obj = new UserMessage();
-                obj.conversation.subject=rs.getString("subject");
-                obj.message.messageBoody=rs.getString("message");
-                obj.message.create_at=rs.getTimestamp("created_at");
-                System.out.println("subject is"+obj.conversation.subject);
-                System.out.println("messeage is is"+obj.message.messageBoody);
-                System.out.println("messeage sent at"+ obj.message.create_at);
+                obj.conversation.id = rs.getInt("conversation_id");
+                obj.conversation.subject = rs.getString("subject");
                 messages.add(obj);
-                
-                
+
             }
+            for (int i = 0; i < messages.size(); i++) {
+                stm = DatabaseConnector.getConnection().prepareStatement("SELECT message.message , message.created_at , user_message.sender_id FROM  message\n"
+                        + "    INNER JOIN user_message on message.id = message_id\n"
+                        + "    INNER JOIN conversation on user_message.conversation_id = conversation.id\n"
+                        + "    WHERE conversation_id = ? ORDER BY created_at DESC LIMIT 1");
+
+                stm.setInt(1, messages.get(i).conversation.id);
+                rs = stm.executeQuery();
+                while (rs.next()) {
+                    messages.get(i).message.messageBoody=rs.getString("message");
+                    messages.get(i).message.create_at=rs.getTimestamp("created_at");
+                    messages.get(i).recipent=rs.getString("sender_id");
+                }
+
+            }
+
             return messages;
 
         } catch (SQLException ex) {
@@ -83,8 +99,8 @@ public class InboxController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
-           
-            request.setAttribute("conversations",  getConverations(request));
+
+            request.setAttribute("conversations", getConverations(request));
             request.getRequestDispatcher("inbox.jsp").forward(request, response);
         }
     }
@@ -101,8 +117,8 @@ public class InboxController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        System.out.println(">>>>>>>>>>><><>"+request.getParameter("todo"));
+
+        System.out.println(">>>>>>>>>>><><>" + request.getParameter("conversation_id"));
         processRequest(request, response);
     }
 
