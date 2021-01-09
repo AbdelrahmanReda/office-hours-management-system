@@ -33,6 +33,11 @@
             <a class="reserved-office-hours" href="AppointmentController">Reserved Office Hours</a>
         </li>
         
+         <li>
+            <a class="compose-mail" href="MailController">Compose Mail</a>
+        </li>
+
+        
 
         <%}%>
         <% 

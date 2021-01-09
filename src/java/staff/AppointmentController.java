@@ -7,6 +7,7 @@ package staff;
 
 import Helpers.DatabaseConnector;
 import Helpers.SessionController;
+import Mail.MailConfiguration;
 import Models.Appointment;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -37,26 +38,87 @@ public class AppointmentController extends HttpServlet {
             return false;
         }
     }
-  
+
+    private void notifyStudent(String studentMail) {
+        System.out.println("calliiiiiiiiiiiiiiiiiiiiiiiiiiiiiiing");
+        studentMail = "boodycat09@gmail.com";
+        System.out.println("notifing student on meeting cancellation");
+        String from = "boodycat009@gmail.com";
+        String pass = "2266554488";
+        String recipients = studentMail;
+        String subject = "Meeting Cancelation";
+        String message = "We are sorry we well cancel the meeting";
+        System.out.println("we cancel now -------------------------------- ------------ ----  now");
+        MailConfiguration.SendEmailToStaff(from, recipients, subject, message, pass);
+        System.out.println("we canceled now -------------------------------- ------------ ----  now");
+
+    }
+
+    private void notifyStaffMember(String staffMail) {
+        System.out.println("notifing staff on meeting cancellation");
+
+    }
 
     public void delteAppointment(HttpServletRequest request) {
-        if (isNumeric(request.getParameter("reservation_id"))) {
-            try {
-                System.out.println("it is number");
+
+        try {
+
+            if (isNumeric(request.getParameter("reservation_id"))) {
+
                 Integer id = Integer.parseInt(request.getParameter("reservation_id"));
+
+                if (SessionController.getSessionAtrributeValue(request, "user_type").equals("staff_member")) {
+                    String studentMail = null;
+                    PreparedStatement stm = DatabaseConnector.getConnection().prepareStatement("SELECT student.mail FROM appointment\n"
+                            + "INNER JOIN student  on appointment.student_id = student.id\n"
+                            + "WHERE appointment.id=?;");
+                    stm.setInt(1, id);
+                    ResultSet rs = stm.executeQuery();
+
+                    while (rs.next()) {
+                        studentMail = rs.getString("mail");
+                    }
+
+                    notifyStudent(studentMail);
+
+                } else {
+
+                    String StaffMail = null;
+                    PreparedStatement stm = DatabaseConnector.getConnection().prepareStatement("SELECT staff.mail FROM appointment\n"
+                            + "INNER JOIN staff  on appointment.staff_id = staff.id\n"
+                            + "WHERE appointment.id=?;");
+
+                    ResultSet rs = stm.executeQuery();
+                    while (rs.next()) {
+                        StaffMail = rs.getString("mail");
+                    }
+                    notifyStaffMember(StaffMail);
+
+                }
+
+                //System.out.println("it is number");
                 PreparedStatement stm = DatabaseConnector.getConnection().prepareStatement("DELETE FROM appointment where id  =  ?");
                 stm.setInt(1, id);
                 stm.executeUpdate();
-            } catch (SQLException ex) {
-                Logger.getLogger(AppointmentController.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ClassNotFoundException ex) {
-                Logger.getLogger(AppointmentController.class.getName()).log(Level.SEVERE, null, ex);
-            }
 
-        } else {
-            System.out.println("it is a day");
-            String day = request.getParameter("reservation_id");
-            try {
+            } else {
+                System.out.println("it is a day");
+
+                String day = request.getParameter("reservation_id");
+
+                PreparedStatement stmt = DatabaseConnector.getConnection().prepareCall("SELECT student.mail FROM student\n"
+                        + "INNER  JOIN appointment ON student.id = appointment.student_id\n"
+                        + "INNER JOIN office_hours  on appointment.office_hour_id = office_hours.id\n"
+                        + "WHERE appointment.staff_id = ? AND office_hours.day=?");
+
+                stmt.setInt(1, Integer.parseInt(SessionController.getSessionAtrributeValue(request, "id")));
+                stmt.setString(1, day);
+                ResultSet rs = stmt.executeQuery();
+                while (rs.next()) {
+                    String mail = rs.getString("mail");
+                    notifyStudent(mail);
+                }
+
                 PreparedStatement stm = DatabaseConnector.getConnection().prepareStatement("DELETE  FROM  appointment WHERE id IN (\n"
                         + "SELECT appointment.id FROM appointment\n"
                         + "INNER JOIN office_hours ON appointment.office_hour_id = office_hours.id\n"
@@ -66,23 +128,14 @@ public class AppointmentController extends HttpServlet {
                 stm.setString(1, day);
                 stm.executeUpdate();
 
-            } catch (ClassNotFoundException ex) {
-                Logger.getLogger(AppointmentController.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (SQLException ex) {
-                Logger.getLogger(AppointmentController.class.getName()).log(Level.SEVERE, null, ex);
             }
+
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(AppointmentController.class.getName()).log(Level.SEVERE, null, ex);
         }
+
     }
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -99,34 +152,25 @@ public class AppointmentController extends HttpServlet {
             ArrayList<Appointment> appointments = new ArrayList<>();
 
             try {
-                PreparedStatement stm ;
-                
-                if (SessionController.getSessionAtrributeValue(request, "user_type").equals("staff_member"))
-                {
-                      stm = DatabaseConnector.getConnection().prepareStatement("SELECT * FROM appointment\n"
-                        + "INNER JOIN office_hours on appointment.office_hour_id = office_hours.id\n"
-                        + "INNER JOIN staff  on appointment.staff_id = staff.id\n"
-                        + "INNER JOIN slot ON office_hours.slot = slot.id\n"
-                        + "INNER JOIN student on appointment.student_id = student.id WHERE appointment.staff_id=?;");
-                
-                    
-                    
-                }
-                else
-                    
-                {
+                PreparedStatement stm;
+
+                if (SessionController.getSessionAtrributeValue(request, "user_type").equals("staff_member")) {
+                    stm = DatabaseConnector.getConnection().prepareStatement("SELECT * FROM appointment\n"
+                            + "INNER JOIN office_hours on appointment.office_hour_id = office_hours.id\n"
+                            + "INNER JOIN staff  on appointment.staff_id = staff.id\n"
+                            + "INNER JOIN slot ON office_hours.slot = slot.id\n"
+                            + "INNER JOIN student on appointment.student_id = student.id WHERE appointment.staff_id=?;");
+
+                } else {
                     System.out.println("i am studemt ya man");
-                 stm = DatabaseConnector.getConnection().prepareStatement("SELECT * FROM appointment\n"
-                        + "INNER JOIN office_hours on appointment.office_hour_id = office_hours.id\n"
-                        + "INNER JOIN staff  on appointment.staff_id = staff.id\n"
-                        + "INNER JOIN slot ON office_hours.slot = slot.id\n"
-                        + "INNER JOIN student on appointment.student_id = student.id WHERE appointment.student_id=?;");
-                
-                
+                    stm = DatabaseConnector.getConnection().prepareStatement("SELECT * FROM appointment\n"
+                            + "INNER JOIN office_hours on appointment.office_hour_id = office_hours.id\n"
+                            + "INNER JOIN staff  on appointment.staff_id = staff.id\n"
+                            + "INNER JOIN slot ON office_hours.slot = slot.id\n"
+                            + "INNER JOIN student on appointment.student_id = student.id WHERE appointment.student_id=?;");
+
                 }
-               
-                
-                
+
                 stm.setInt(1, Integer.parseInt(SessionController.getSessionAtrributeValue(request, "id").toString()));
                 ResultSet rs = stm.executeQuery();
                 while (rs.next()) {
