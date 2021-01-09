@@ -18,13 +18,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.json.JsonObject;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -32,6 +30,43 @@ import javax.servlet.http.HttpSession;
  */
 @WebServlet(name = "OfficeHoursController", urlPatterns = {"/OfficeHoursController"})
 public class OfficeHoursController extends HttpServlet {
+
+    public ArrayList<OfficeHours> getStaffStaffOfficeHourse(HttpServletRequest request) {
+        System.out.println("l>>><><><" + Integer.parseInt(request.getParameter("getStaffMembers")));
+        try {
+            ArrayList<OfficeHours> officeHours = new ArrayList<>();
+            PreparedStatement stmt = DatabaseConnector.getConnection().prepareStatement("SELECT * FROM staff\n"
+                    + "INNER  JOIN office_hours  on staff.id = staff_id\n"
+                    + "INNER  JOIN slot  on office_hours.slot = slot.id\n"
+                    + "WHERE staff.id =?");
+            stmt.setInt(1, Integer.parseInt(request.getParameter("getStaffMembers")));
+
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+
+                OfficeHours obj = new OfficeHours();
+                obj.id = rs.getInt("office_hours.id");
+                obj.day = rs.getString("day");
+                obj.staff.id = rs.getInt("staff_id");
+                obj.staff.dapartment = rs.getString("dapartment");
+                obj.staff.user_name = rs.getString("user_name");
+                obj.staff.mail = rs.getString("mail");
+               
+
+                obj.slot.slot_name = rs.getString("slot_name");
+                obj.slot.from_hour = rs.getTime("from_hour");
+                obj.slot.to_hour = rs.getTime("to_hour");
+                System.out.println("slot.to_hour " + rs.getTime("to_hour"));
+                officeHours.add(obj);
+            }
+            return officeHours;
+
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(OfficeHoursController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+
+    }
 
     public ArrayList<OfficeHours> getOfficeHourse(HttpServletRequest request) {
         try {
@@ -44,18 +79,15 @@ public class OfficeHoursController extends HttpServlet {
                 obj.id = rs.getInt("id");
                 obj.staff_id = rs.getInt("staff_id");
                 obj.day = rs.getString("day");
-                obj.slot.slot_name=rs.getString("slot_name");
-                obj.slot.from_hour=rs.getTime("from_hour");
-                obj.slot.to_hour=rs.getTime("to_hour");
-                
-              
+                obj.slot.slot_name = rs.getString("slot_name");
+                obj.slot.from_hour = rs.getTime("from_hour");
+                obj.slot.to_hour = rs.getTime("to_hour");
+
                 officeHours.add(obj);
             }
             return officeHours;
 
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(OfficeHoursController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
+        } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(OfficeHoursController.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
@@ -108,7 +140,7 @@ public class OfficeHoursController extends HttpServlet {
                 obj.id = rs.getInt("id");
                 obj.staff_id = rs.getInt("staff_id");
                 obj.day = rs.getString("day");
-                //obj.time = rs.getString("time");
+
                 return obj;
             }
 
@@ -134,50 +166,43 @@ public class OfficeHoursController extends HttpServlet {
 
     }
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
 
-            request.setAttribute("OfficeHours", getOfficeHourse(request));
+            if (request.getParameter("getStaffMembers") != null) {
+                request.setAttribute("OfficeHours", getStaffStaffOfficeHourse(request));
+                request.getRequestDispatcher("staff_member.jsp").forward(request, response);
 
-             //request.getParameter("operation");
-            System.out.println("operation is e daaaaaaaaaaaaaaaaaaaa" + request.getParameter("operation"));
-            //JsonObject data = new Gson().fromJson(request.getReader(), JsonObject.class);
-            System.out.println("-------------------------------");
-            //request.getRequestDispatcher("manage_office_hours.jsp").forward(request, response);
+            } else {
+                request.setAttribute("OfficeHours", getOfficeHourse(request));
 
-            if (request.getParameter("operation").equals("selection")) {
-                String json = new Gson().toJson(getOfficeHourse(request));
-                System.out.println(json);
-                response.setContentType("application/json");
-                response.setCharacterEncoding("UTF-8");
-                response.getWriter().write(json);
+                if (request.getParameter("operation").equals("selection")) {
+                    String json = new Gson().toJson(getOfficeHourse(request));
+                    System.out.println(json);
+                    response.setContentType("application/json");
+                    response.setCharacterEncoding("UTF-8");
+                    response.getWriter().write(json);
+
+                }
+                if (request.getParameter("operation").equals("delete")) {
+                    System.out.println("delete operation");
+                    deleteOfficeHour(request);
+                }
+                if (request.getParameter("operation").equals("update")) {
+                    System.out.println("update operation");
+                    System.out.println("id is" + request.getParameter("id"
+                            + ""));
+                    //updateOfficeHour(request);
+                }
+                if (request.getParameter("operation").equals("insertion")) {
+                    System.out.println("insert operation");
+                    insertOfficeHour(request);
+                }
 
             }
-            if (request.getParameter("operation").equals("delete")) {
-                System.out.println("delete operation");
-                deleteOfficeHour(request);
-            }
-            if (request.getParameter("operation").equals("update")) {
-                System.out.println("update operation");
-                System.out.println("id is"+request.getParameter("id"
-                        + ""));
-                //updateOfficeHour(request);
-            }
-            if (request.getParameter("operation").equals("insertion")) {
-                System.out.println("insert operation");
-                insertOfficeHour(request);
-            }
+
         }
     }
 

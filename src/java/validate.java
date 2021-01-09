@@ -28,13 +28,12 @@ public class validate extends HttpServlet {
             throws ServletException, IOException, ClassNotFoundException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-
             String email = request.getParameter("email");
             String pass = request.getParameter("password");
             String type = request.getParameter("user_type");
-            System.out.println("type is "+type);
+            System.out.println("type is " + type);
             if (type.equals("student")) {
-
+                System.out.println("it is student");
                 PreparedStatement stmt = DatabaseConnector.getConnection().prepareStatement("SELECT * FROM student WHERE student.mail = ? AND student.password = ?");
                 stmt.setString(1, email);
                 stmt.setString(2, pass);
@@ -47,12 +46,12 @@ public class validate extends HttpServlet {
                     out.print(rs.getString("mail"));
                     out.print(rs.getString("gender"));
                     String user_name = rs.getString("user_name");
-
                     HttpSession session = request.getSession();
-
                     session.setAttribute("email", email);
                     session.setAttribute("username", user_name);
                     session.setAttribute("password", pass);
+                    session.setAttribute("user_type", "student");
+
                     response.sendRedirect("DashboardController");
 
                 }
@@ -73,7 +72,7 @@ public class validate extends HttpServlet {
                     out.print(rs.getString("mail"));
                     out.print(rs.getString("gender"));
                     String user_name = rs.getString("user_name");
-                    int id=rs.getInt("id");
+                    int id = rs.getInt("id");
                     HttpSession session = request.getSession();
                     session.setAttribute("email", email);
                     session.setAttribute("id", id);

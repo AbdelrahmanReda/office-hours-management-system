@@ -62,7 +62,6 @@
         HttpSession s = request.getSession();
         s.setAttribute("staffName", name);
         String studentEmail= (String) session.getAttribute("email");
-        
         boolean status = false;
         String url = "jdbc:mysql://localhost:3306/office_hours";
         Connection con = null;

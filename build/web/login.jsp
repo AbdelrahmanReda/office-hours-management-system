@@ -24,28 +24,30 @@
                     <form  class="login-form" method="POST" action="validate" >
                         <h1 class="text-center" >Welcome To </h1>
                         <h4 class="text-center">Online Banking System</h4>
-                          <%  response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); %>
+                        <%  response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); %>
                         <%
-                            if (session.getAttribute("wrong_logging") != null){
-                               out.print( "<div class=\"alert alert-danger\"><strong > Error!</strong > Wrong Loging Data, please try again.</div> ");         
-                              }
+                            if (session.getAttribute("wrong_logging") != null) {
+                                out.print("<div class=\"alert alert-danger\"><strong > Error!</strong > Wrong Loging Data, please try again.</div> ");
+                            }
                             session.removeAttribute("wrong_logging");
                             out.print(session.getAttribute("email"));
-                                  
-                            if (session.getAttribute("email")!=null){
-                                    response.sendRedirect("dashboard.jsp");
-                                }
+
+                            if (session.getAttribute("email") != null) {
+                                response.sendRedirect("dashboard.jsp");
+                            }
                         %>
 
                         <div class="mb-3">
                             <label for="customer_id" class="form-label">Student Mail</label>
                             <input type="mail" class="form-control" id="customer_id" name="email">
-                          
+
                         </div>
                         <div class="mb-3">
                             <label for="customer_password" class="form-label">Password</label>
                             <input type="password" class="form-control" id="customer_password" name="password">
                         </div>
+                        <input type="hidden"  name="user_type" value="student">
+
                         <button style="width: 100%" type="submit" class="btn btn-primary">Sign in</button>  
                     </form>    
                 </div>

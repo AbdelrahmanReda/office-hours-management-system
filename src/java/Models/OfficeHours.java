@@ -5,18 +5,16 @@
  */
 package Models;
 
-
-
 /**
  *
  * @author boody
  */
 public class OfficeHours {
+
     public int id;
     public int staff_id;
     public String day;
     public Slot slot = new Slot();
-    
-    
-    
+    public Staff staff = new Staff();
+
 }

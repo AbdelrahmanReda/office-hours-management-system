@@ -33,8 +33,8 @@ public class DashboardController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             
-         
-             request.getRequestDispatcher("dashboard.jsp").forward(request, response);
+            
+            request.getRequestDispatcher("dashboard.jsp").forward(request, response);
         }
     }
 

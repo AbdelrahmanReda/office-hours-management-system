@@ -1,11 +1,4 @@
 
-import java.io.UnsupportedEncodingException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.*;
 import javax.mail.*;
 import javax.mail.internet.*;
 import javax.activation.*;
@@ -34,15 +27,13 @@ public class test {
     public static void sendMail (String recipt) throws Exception  {
         System.out.println("preperaing");
         Properties prop = new Properties();
-//        prop.put("mail.smtp.auth", "true");
-//        prop.put("mail.smtp.starttls.enable", "true");
-//        prop.put("mail.smtp.host", "smtp.gmail.com");
-//        prop.put("mail.smtp.host", "587");
-//        
-//        prop.put("mail.imap.ssl", "true");
-//        prop.put("mail.smtp.ssl.trust", "smtp.gmail.com");
-//        prop.put("mail.smtp.EnableSSL.enable", "true");
-//        prop.put("mail.smtp.starttls.enable", "true");
+        
+        
+
+
+
+
+
 
 Properties properties = new Properties();
 

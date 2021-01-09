@@ -14,14 +14,18 @@
         <h3>welcome </h3>
     </div>
     <ul class="list-unstyled components">
+        <%  
+        
+            if (session.getAttribute("user_type")==("student")) {%>
+
         <li>
             <a class="Dashboard" href="DashboardController">Home</a>
         </li>
         <li>
-            <a class="Transactins" href="staffCourse.jsp">Courses</a>
+            <a class="find-staff" href="StaffController">Find Staff</a>
         </li>
         <li>
-            <a class="Transactins" href="veiwMessages.jsp">Messages</a>
+            <a class="staff-member" href="${pageContext.request.contextPath}/StaffController?getStaffMembers=true">Staff Members</a>
         </li>  
         <li>
             <a class="Transactins" href="contact.jsp">Staff E-mails</a>
@@ -29,10 +33,11 @@
         <li>
             <a class="Transactins" href="officehourse.jsp">Staff office hours</a>
         </li>
-        
-        <%
-            
-            if (session.getAttribute("user_type").equals("staff_member")) {%>
+        <%}%>
+        <% if (session.getAttribute("user_type")==("staff_member")) {%>
+        <li>
+            <a class="inbox" href="InboxController">Inbox</a>
+        </li>
         <li>
             <a class="student" href="StudentController">Students</a>
         </li>
@@ -45,12 +50,6 @@
         <li>
             <a class="compose-mail" href="MailController">Compose Mail</a>
         </li>
-        
-         <li>
-            <a class="inbox" href="InboxController">Inbox</a>
-        </li>
-       
-        
 
         <%}%>
     </ul>

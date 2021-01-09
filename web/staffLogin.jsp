@@ -18,25 +18,23 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
     </head>
     <body>
-        
-        
         <div class="container">
             <div class="row" >
                 <div class="col-lg-12 " style="padding-top: 225px">
                     <form  class="login-form" method="POST" action="validate" >
                         <h1 class="text-center" >Welcome To </h1>
                         <h4 class="text-center">Online Banking System</h4>
-                          <%  response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); %>
+                        <%  response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); %>
                         <%
-                            if (session.getAttribute("wrong_logging") != null){
-                               out.print( "<div class=\"alert alert-danger\"><strong > Error!</strong > Wrong Loging Data, please try again.</div> ");         
-                              }
+                            if (session.getAttribute("wrong_logging") != null) {
+                                out.print("<div class=\"alert alert-danger\"><strong > Error!</strong > Wrong Loging Data, please try again.</div> ");
+                            }
                             session.removeAttribute("wrong_logging");
                             out.print(session.getAttribute("email"));
-                                  
-                            if (session.getAttribute("email")!=null){
-                                    response.sendRedirect("dashboard.jsp");
-                                }
+
+                            if (session.getAttribute("email") != null) {
+                                response.sendRedirect("dashboard.jsp");
+                            }
                         %>
 
                         <div class="mb-3">
@@ -48,10 +46,8 @@
                             <input type="password" class="form-control" id="customer_password" name="password">
                         </div>
                         <div class="mb-3">
- 
-                            <input type="hidden"  name="user_type" value="staff">
                         </div>
-                        
+                        <input type="hidden"  name="user_type" value="staff">
                         <button style="width: 100%" type="submit" class="btn btn-primary">Sign in</button>  
                     </form>    
                 </div>

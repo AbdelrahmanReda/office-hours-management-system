@@ -36,12 +36,13 @@
                         <div class="col-lg-12 p-0">
                             <div class="card">
                                 <div class="card-header">
+                                    
                                     <h3>Primary Mails</h3>  
                                 </div>
                                 <div class="card-body">
 
 
-              
+                                    
                                     <%
                                         ArrayList<Models.UserMessage> list = (ArrayList<Models.UserMessage>) request.getAttribute("conversation");
                                         for (int i = 0; i < list.size(); i++) {
@@ -57,7 +58,7 @@
                                                         out.print(" <h6>" + list.get(i).sender + " </h6>");
                                                         out.print( " <p class=\"text-small mb-0 text-muted\">"+list.get(i).message.messageBoody+"</p> </div> ");
                                                         
-                                                        out.print(" <p class=\"small text-muted\">"+list.get(i).message.create_at+"</p></div></div>");
+                                                        out.print(" <p class=\"small text-muted \">"+list.get(i).message.create_at+"</p></div></div>");
                                                     }
                                                 %>
                                             </div>

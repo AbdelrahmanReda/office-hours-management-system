@@ -57,28 +57,26 @@ public final class staffLogin_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.write("        <script src=\"https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js\" integrity=\"sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW\" crossorigin=\"anonymous\"></script>\n");
       out.write("    </head>\n");
       out.write("    <body>\n");
-      out.write("        \n");
-      out.write("        \n");
       out.write("        <div class=\"container\">\n");
       out.write("            <div class=\"row\" >\n");
       out.write("                <div class=\"col-lg-12 \" style=\"padding-top: 225px\">\n");
       out.write("                    <form  class=\"login-form\" method=\"POST\" action=\"validate\" >\n");
       out.write("                        <h1 class=\"text-center\" >Welcome To </h1>\n");
       out.write("                        <h4 class=\"text-center\">Online Banking System</h4>\n");
-      out.write("                          ");
+      out.write("                        ");
   response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); 
       out.write("\n");
       out.write("                        ");
 
-                            if (session.getAttribute("wrong_logging") != null){
-                               out.print( "<div class=\"alert alert-danger\"><strong > Error!</strong > Wrong Loging Data, please try again.</div> ");         
-                              }
+                            if (session.getAttribute("wrong_logging") != null) {
+                                out.print("<div class=\"alert alert-danger\"><strong > Error!</strong > Wrong Loging Data, please try again.</div> ");
+                            }
                             session.removeAttribute("wrong_logging");
                             out.print(session.getAttribute("email"));
-                                  
-                            if (session.getAttribute("email")!=null){
-                                    response.sendRedirect("dashboard.jsp");
-                                }
+
+                            if (session.getAttribute("email") != null) {
+                                response.sendRedirect("dashboard.jsp");
+                            }
                         
       out.write("\n");
       out.write("\n");
@@ -91,10 +89,8 @@ public final class staffLogin_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.write("                            <input type=\"password\" class=\"form-control\" id=\"customer_password\" name=\"password\">\n");
       out.write("                        </div>\n");
       out.write("                        <div class=\"mb-3\">\n");
-      out.write(" \n");
-      out.write("                            <input type=\"hidden\"  name=\"user_type\" value=\"staff\">\n");
       out.write("                        </div>\n");
-      out.write("                        \n");
+      out.write("                        <input type=\"hidden\"  name=\"user_type\" value=\"staff\">\n");
       out.write("                        <button style=\"width: 100%\" type=\"submit\" class=\"btn btn-primary\">Sign in</button>  \n");
       out.write("                    </form>    \n");
       out.write("                </div>\n");
