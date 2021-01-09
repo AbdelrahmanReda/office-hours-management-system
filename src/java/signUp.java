@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 
+import Helpers.DatabaseConnector;
 import Mail.MailConfiguration;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -33,38 +34,40 @@ public class signUp extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
 
-            String userName = request.getParameter("username");
-            String email = request.getParameter("FromEmailAddress");
-            String gender = request.getParameter("gender");
-            String country = request.getParameter("Country");
+            System.out.println("reqest has " + request);
+            String password = MailConfiguration.generatePassword(8).toString();
 
-            char[] password = MailConfiguration.generatePassword(10);
-            String pass = String.valueOf(password);
-            MailConfiguration.SendEmail(pass,email);
-            
-            String url = "jdbc:mysql://localhost:3306/office_hours";
-            Connection con = null;
-            Statement Stmt = null;
-            ResultSet RS = null;
+            if (request.getParameter("user_type").equals("staff")) {
 
-            try {
-                Class.forName("com.mysql.jdbc.Driver");
-                con = DriverManager.getConnection(url, "root", "1234");
-                Stmt = (Statement) con.createStatement();
-                
-               Stmt.executeUpdate("INSERT INTO student VALUES("
-                        + "'" + userName + "',"
-                        + "'" + email + "',"
-                        + "'" + pass+ "',"
-                        + "'" + gender+ "',"
-                        + "'" + "student"+ "',"
-                        + "'" + country + "')");
-       
-                
-            } catch (SQLException ex) {
-                ex.printStackTrace();
+                MailConfiguration.SendEmail(password, request.getParameter("email"));
+                PreparedStatement statement = DatabaseConnector.getConnection().prepareStatement("INSERT INTO staff VALUES (DEFAULT,?,?,?,?,?,?);");
+                statement.setString(1, request.getParameter("user_name"));
+                statement.setString(2, request.getParameter("email"));
+                statement.setString(3, password);
+                statement.setString(4, request.getParameter("gender"));
+                statement.setString(5, request.getParameter("country"));
+                statement.setString(6, "IS");
+                statement.executeUpdate();
+                request.getRequestDispatcher("staffLogin.jsp").forward(request, response);
+
+            } else {
+
+                MailConfiguration.SendEmail(password, request.getParameter("email"));
+                PreparedStatement statement = DatabaseConnector.getConnection().prepareStatement("INSERT INTO student VALUES (DEFAULT,?,?,?,?,?,?,?);");
+                statement.setString(1, request.getParameter("user_name"));
+                statement.setString(2, request.getParameter("email"));
+                statement.setString(3, password);
+                statement.setString(4, request.getParameter("gender"));
+                statement.setString(5, request.getParameter("country"));
+                statement.setInt(6, 3);
+                statement.setInt(7, 3);
+                statement.executeUpdate();
+                request.getRequestDispatcher("login.jsp").forward(request, response);
+
             }
 
+        } catch (SQLException ex) {
+            Logger.getLogger(signUp.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

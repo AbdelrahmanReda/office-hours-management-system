@@ -22,7 +22,6 @@
             <div class="row" >
                 <div class="col-lg-12 " style="padding-top: 225px">
                     <form  class="login-form" method="POST" action="validate" >
-                        
                         <%  response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); %>
                         <%
                             if (session.getAttribute("wrong_logging") != null) {
@@ -34,7 +33,6 @@
                                 response.sendRedirect("dashboard.jsp");
                             }
                         %>
-
                         <div class="mb-3">
                             <label for="customer_id" class="form-label">Staff Mail</label>
                             <input type="mail" class="form-control" id="customer_id" name="email">  
@@ -47,12 +45,10 @@
                         </div>
                         <input type="hidden"  name="user_type" value="staff">
                         <button style="width: 100%" type="submit" class="btn btn-primary">Sign in</button>  
-
                         <div class="d-flex justify-content-center align-items-center mt-2 flex-column">
                             <small text-center>Are you Student?</small>
                             <br>
                             <a style="text-decoration: underline" href="login.jsp">Login in as Student</a>
-
                         </div>
                     </form>    
                 </div>

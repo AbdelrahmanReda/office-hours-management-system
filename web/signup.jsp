@@ -1,44 +1,53 @@
+<%-- 
+    Document   : signup
+    Created on : Jan 9, 2021, 11:11:50 PM
+    Author     : boody
+--%>
+
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
 <html>
     <head>
-        <title>Sign Up</title>
+        <title>TODO supply a title</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+        <link rel="stylesheet" href="style2.css">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
         <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-        <script src="bootstrap-select-dropdown.min.js"></script>
-
-
     </head>
     <body>
-        <h1>Sign Up</h1>
-        <p>Please Enter The Correct Mail To Send Your Password To It</p>
-        <form action="signUp" method="post" id="SignUp100" onsubmit="return ValidateForm(this);">
+        <div class="container">
+            <div class="row" >
+                <div class="col-lg-12 " style="padding-top: 100px">
+                    <form  class="login-form" method="POST" action="signUp" >
 
-            <table border="0" cellpadding="5" cellspacing="0" width="600">
-                <tr> 
-                    <td><label for="FirstName">First Name</label></td>
-                    <td><input name="FirstName"   placeholder="First Name " type="text"/></td>
-                </tr>
-                <tr>
-                    <td> <label for="LastName">Last Name:</label></td>
-                    <td><input name="LastName"  placeholder="Last Name" type="text"/></td>
-                </tr>
-                <tr>
-                    <td> <label for="username">Username:</label></td>
-                    <td><input name="username"  placeholder="Username" type="text"/></td>
-                </tr>
+                        <div class="mb-3">
+                            <label for="first-name" class="form-label">First Name</label>
+                            <input type="text" class="form-control" id="first-name" name="first_name" required>
 
+                        </div>
 
-                <tr> <td>
-                        <label for="FromEmailAddress">E-mail:</label>
-                    </td> <td>
-                        <input name="FromEmailAddress"  placeholder="Enter Email" type="email" maxlength="60" style="width:100%;max-width: 300px;" />
-                    </td> </tr> 
-                <tr>
-                    <td>  <label for="Country"> Country </label></td>
-                    <td>
-                        <select name="Country" class="form-control" id="country">
-                            <option value="0" label="Select a country" selected="selected"></option>
-                            <optgroup id="country-optgroup-Africa" label="Africa">
+                        <div class="mb-3">
+                            <label for="last-name" class="form-label">Last Name</label>
+                            <input type="text" class="form-control" id="last-name" name="Last_name" required>
+
+                        </div>
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Username</label>
+                            <input type="text" class="form-control" id="username" name="user_name" required>
+
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">E-mail</label>
+                            <input type="mail" class="form-control" id="email" name="email" required>
+
+                        </div>
+
+                        <div class="form-group">
+                            <label for="country">Country</label>
+                            <select class="form-control" id="exampleFormControlSelect1" id="country" name="country">
+                                  <optgroup id="country-optgroup-Africa" label="Africa">
                                 <option value="DZ" label="Algeria">Algeria</option>
                                 <option value="AO" label="Angola">Angola</option>
                                 <option value="BJ" label="Benin">Benin</option>
@@ -302,69 +311,61 @@
                                 <option value="UM" label="U.S. Minor Outlying Islands">U.S. Minor Outlying Islands</option>
                                 <option value="VU" label="Vanuatu">Vanuatu</option>
                                 <option value="WF" label="Wallis and Futuna">Wallis and Futuna</option>
-                            </optgroup>
+                            </select>
+                        </div>
 
-                        </select>
-                    </td> </tr> 
-                <tr>
-                    <td><input type="radio" name="gender" value="male"><Label>Male</label> </td> 
-                    <td><input type="radio" name="gender" value="female"> <Label>Female</label></td>
+                        <div class="form-check mt-2">
+                            <input class="form-check-input" type="radio" name="gender" id="male" value="male" checked>
+                            <label class="form-check-label" for="male">
+                                Male
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="gender" id="female" value="female" checked>
+                            <label class="form-check-label" for="female">
+                                Female
+                            </label>
+                        </div>
+                        
+                        
+                        <div class="form-check mt-2">
+                            <input class="form-check-input" type="radio" name="user_type" id="student" value="student" checked>
+                            <label class="form-check-label" for="student">
+                                Student
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="user_type" id="staff" value="staff" checked>
+                            <label class="form-check-label" for="staff">
+                                Staff
+                            </label>
+                        </div>
+                        
+                        
 
-                </tr>
-                <tr>
+                        <div class="d-flex p-3 justify-content-center align-items-center"> 
+                            <div class="g-recaptcha" data-sitekey="6Lc2pRQaAAAAABMICNck0r4-rweKuEKf1U4hsVTu"></div>
 
-                    <td><div class="g-recaptcha" data-sitekey="6Lc2pRQaAAAAABMICNck0r4-rweKuEKf1U4hsVTu"></div></td>
-                </tr>
+                        </div>
 
-                <div class="clearfix">
-                    <tr>
-                        <td><button type="submit" class="signupbtn">Sign Up</button></td>
-                    </tr>
 
+
+                       
+
+                        <button style="width: 100%" type="submit" class="btn btn-primary">Sign up</button>
+
+
+
+                        <div class="d-flex justify-content-center align-items-center mt-2 flex-column">
+                            <small text-center>Already have an account?</small>
+                            <br>
+                            <a style="text-decoration: underline" href="login.jsp">Login in as Staff Member</a>
+
+                        </div>
+                    </form>    
                 </div>
-
-            </table>
-            
-            <div class="container signin">
-                <p>Already have an account? <a href="logIn.html">Sign in</a>.</p>
             </div>
-            
-            <script type="text/javascript" >
-                function ValidateForm(frm) {
-                    if (frm.FirstName.value == "") {
-                        alert('First Name is required.');
-                        frm.FirstName.focus();
-                        return false;
-                    }
-                    if (frm.LastName.value == "") {
-                        alert('Last Name is required.');
-                        frm.LastName.focus();
-                        return false;
-                    }
-                    if (frm.username.value == "") {
-                        alert('Username is required.');
-                        frm.username.focus();
-                        return false;
-                    }
-                    if (frm.FromEmailAddress.value == "") {
-                        alert('Email address is required.');
-                        frm.FromEmailAddress.focus();
-                        return false;
-                    }
-                    if (frm.FromEmailAddress.value.indexOf("@") < 1 || frm.FromEmailAddress.value.indexOf(".") < 1) {
-                        alert('Please enter a valid email address.');
-                        frm.FromEmailAddress.focus();
-                        return false;
-                    }
-                    if (frm.Country.value == "") {
-                        alert('Country is required.');
-                        frm.Country.focus();
-                        return false;
-                    }
-                    return true;
-                }
-            </script>
-        </form>
-
+        </div>
     </body>
 </html>
+
