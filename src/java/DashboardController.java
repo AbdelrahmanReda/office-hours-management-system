@@ -57,7 +57,7 @@ public class DashboardController extends HttpServlet {
         stm.setString(1, LocalDate.now().getDayOfWeek().name());
         ResultSet rs = stm.executeQuery();
         while (rs.next()) {
-            sendReminderMail(rs.getString("staff.mail"),rs.getString("student.mail"),rs.getString("slot_name"));
+            //sendReminderMail(rs.getString("staff.mail"),rs.getString("student.mail"),rs.getString("slot_name"));
 
         }
 
