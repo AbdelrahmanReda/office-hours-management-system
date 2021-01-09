@@ -32,7 +32,6 @@ import javax.servlet.http.HttpServletResponse;
 public class OfficeHoursController extends HttpServlet {
 
     public ArrayList<OfficeHours> getStaffStaffOfficeHourse(HttpServletRequest request) {
-        System.out.println("l>>><><><" + Integer.parseInt(request.getParameter("getStaffMembers")));
         try {
             ArrayList<OfficeHours> officeHours = new ArrayList<>();
             PreparedStatement stmt = DatabaseConnector.getConnection().prepareStatement("SELECT * FROM staff\n"
@@ -43,7 +42,6 @@ public class OfficeHoursController extends HttpServlet {
 
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
-
                 OfficeHours obj = new OfficeHours();
                 obj.id = rs.getInt("office_hours.id");
                 obj.day = rs.getString("day");
@@ -54,7 +52,6 @@ public class OfficeHoursController extends HttpServlet {
                 obj.slot.slot_name = rs.getString("slot_name");
                 obj.slot.from_hour = rs.getTime("from_hour");
                 obj.slot.to_hour = rs.getTime("to_hour");
-                System.out.println("slot.to_hour " + rs.getTime("to_hour"));
                 officeHours.add(obj);
             }
             return officeHours;
@@ -92,9 +89,6 @@ public class OfficeHoursController extends HttpServlet {
     }
 
     public void insertOfficeHour(HttpServletRequest request) {
-
-        System.out.println("day is " + request.getParameter("day"));
-        System.out.println("time is " + request.getParameter("slot"));
         try {
             PreparedStatement stmt = DatabaseConnector.getConnection().prepareStatement("INSERT  INTO  office_hours VALUES (DEFAULT,?,?,?)");
             stmt.setInt(1, Integer.parseInt(SessionController.getSessionAtrributeValue(request, "id")));
@@ -110,14 +104,22 @@ public class OfficeHoursController extends HttpServlet {
     }
 
     public void updateOfficeHour(HttpServletRequest request) {
-
+            System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+        
         try {
-            PreparedStatement stmt = DatabaseConnector.getConnection().prepareStatement("UPDATE office_hours set day =? AND time = ? WHERE id=?");
-            stmt.setInt(1, Integer.parseInt(request.getParameter("day")));
-            stmt.setInt(2, Integer.parseInt(request.getParameter("time")));
+            System.out.println("req is "+request);
+            PreparedStatement stmt = DatabaseConnector.getConnection().prepareStatement("UPDATE office_hours set office_hours.day =? , slot = ? WHERE id=?");
+        
+            
+            stmt.setString(1,request.getParameter("day") );
+            stmt.setInt(2, Integer.parseInt(request.getParameter("slot")));
             stmt.setInt(3, Integer.parseInt(request.getParameter("id")));
+            System.out.println("update query is "+stmt);
             stmt.executeUpdate();
-
+            
+            
+            
+            System.out.println("####################################################");
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(OfficeHoursController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
@@ -126,22 +128,17 @@ public class OfficeHoursController extends HttpServlet {
     }
 
     public OfficeHours showOfficeHour(HttpServletRequest request) {
-
         try {
             PreparedStatement stmt = DatabaseConnector.getConnection().prepareStatement("SELECT * FROM office_hours WHERE id=?");
-
             stmt.setInt(1, Integer.parseInt(request.getParameter("id")));
             ResultSet rs = stmt.executeQuery();
             OfficeHours obj = new OfficeHours();
             while (rs.next()) {
-
                 obj.id = rs.getInt("id");
                 obj.staff_id = rs.getInt("staff_id");
                 obj.day = rs.getString("day");
-
                 return obj;
             }
-
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(OfficeHoursController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
@@ -164,9 +161,8 @@ public class OfficeHoursController extends HttpServlet {
     }
 
     private void reserveOfficeHours(HttpServletRequest request) {
-        System.out.println("Hello 1");
-        try {
 
+        try {
             PreparedStatement stm = DatabaseConnector.getConnection().prepareStatement("INSERT INTO appointment VALUES (DEFAULT,?,?,?);");
             stm.setInt(1, Integer.parseInt(request.getParameter("staff_id")));
             stm.setInt(2, Integer.parseInt(SessionController.getSessionAtrributeValue(request, "id")));
@@ -184,8 +180,8 @@ public class OfficeHoursController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-
-            System.out.println("------------> " + request.getParameter("office_hour_id") + " *//*/  " + request.getParameter("staff_id"));
+            
+            
 
             if (request.getParameter("getStaffMembers") != null) {
                 request.setAttribute("OfficeHours", getStaffStaffOfficeHourse(request));
@@ -193,10 +189,9 @@ public class OfficeHoursController extends HttpServlet {
 
             } else if (request.getParameter("office_hour_id") != null && request.getParameter("staff_id") != null) {
 
-                System.out.println("reserve appointment");
 
                 reserveOfficeHours(request);
-                request.getRequestDispatcher("staff_member.jsp").forward(request, response);
+                response.sendRedirect("AppointmentController");
 
             } else {
                 request.setAttribute("OfficeHours", getOfficeHourse(request));
@@ -207,17 +202,23 @@ public class OfficeHoursController extends HttpServlet {
                     response.setContentType("application/json");
                     response.setCharacterEncoding("UTF-8");
                     response.getWriter().write(json);
+                    System.out.println("----------------------------------------------------------------------------------*-*-**-**-*-*--------------------");
 
                 }
                 if (request.getParameter("operation").equals("delete")) {
                     System.out.println("delete operation");
                     deleteOfficeHour(request);
+
+                    String json = new Gson().toJson(getOfficeHourse(request));
+                    System.out.println(json);
+                    response.setContentType("application/json");
+                    response.setCharacterEncoding("UTF-8");
+                    response.getWriter().write(json);
+
                 }
                 if (request.getParameter("operation").equals("update")) {
-                    System.out.println("update operation");
-                    System.out.println("id is" + request.getParameter("id"
-                            + ""));
-                    //updateOfficeHour(request);
+                   
+                    updateOfficeHour(request);
                 }
                 if (request.getParameter("operation").equals("insertion")) {
                     System.out.println("insert operation");

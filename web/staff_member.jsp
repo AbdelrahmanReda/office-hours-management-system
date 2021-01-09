@@ -48,7 +48,7 @@
                                         out.print("<td>" + list.get(i).slot.slot_name + "</td>");
                                         out.print("<td>" + list.get(i).slot.from_hour + "</td>");
                                         out.print("<td>" + list.get(i).slot.to_hour + "</td>");
-                                        out.print("<td> <a href = /Office_Hours/OfficeHoursController?office_hour_id="+ list.get(i).id +"&staff_id="+list.get(i).staff.id + " \" class=\"badge badge-primary\">Primary</a> </tr></td>");
+                                        out.print("<td> <a href = /Office_Hours/OfficeHoursController?office_hour_id="+ list.get(i).id +"&staff_id="+list.get(i).staff.id + " \" class=\"badge badge-primary\">Request Reservation</a> </tr></td>");
 
                                     }
                                 }

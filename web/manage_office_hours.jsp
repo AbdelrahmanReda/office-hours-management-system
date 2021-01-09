@@ -57,7 +57,7 @@
                     </div>
 
 
-                    <!-- Modal -->
+                    <!-- Insert Modal  -->
                     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
@@ -94,13 +94,60 @@
 
                                             </select>
                                         </div>
-
-
                                     </form>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                     <button type="button" class="btn btn-success" onclick="callJqueryAjax()">Add Office Hour</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    
+                    <!-- Update Modal  -->
+                    <div class="modal fade" id="update-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Update Office Hour</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form id="update-form">
+                                        <input type="hidden" name="operation" value="update">
+                                        <input type="hidden" name="id"  id="update-id" >
+                                        <div class="form-group">
+                                            <label for="update-day">Slot</label>
+                                            <select class="form-control"  name="slot" id="update-day">
+                                                <option value="1">First Slot</option>
+                                                <option value="2">Second Slot</option>
+                                                <option value="3">Third Slot</option>
+                                                <option value="4">Fourth Slot</option>
+
+
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="day">Day</label>
+                                            <select class="form-control"  name="day" id="day">
+                                                <option>SATURDAY</option>
+                                                <option>SUNDAY</option>
+                                                <option>MONDAY</option>
+                                                <option>TUESDAY</option>
+                                                <option>WEDNESDAY</option>
+                                                <option>THURSDAY</option>
+                                                <option>FRIDAY</option>
+
+                                            </select>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-success" onclick="update()">Add Office Hour</button>
                                 </div>
                             </div>
                         </div>
@@ -122,18 +169,24 @@
         }
         return text;
     }
-    function update(id) {
-        data = {
-            operation: "update",
-            id: id
-        };
+    function openUpdateModal (id){
+        
+        $('#update-modal').modal('toggle');
+        $('#update-id').val(id);
+    }
+    function update() {
+        
+       
+        
+
+    
         $.ajax({
             url: 'OfficeHoursController',
             method: 'POST',
-            data: jsonToURI(data),
+            data: $('#update-form').serialize(),
             success: function (resultText) {
                 console.log(resultText);
-                buildTable(resultText);
+                getOfficeHourse();
             },
             error: function (jqXHR, exception) {
                 console.log('Error occured!!');
@@ -173,7 +226,7 @@
                     + jsonObject[i]['slot']['to_hour']
                     + '</td> <td style = \"display: flex; justify-content: space-evenly;\" >'
                     + '<button type="submit" onclick="deleteOfficeHour(' + jsonObject[i]['id'] + ') " class="btn btn-danger">Delete</button>'
-                    + '<button type="submit" onclick="update(' + jsonObject[i]['id'] + ') " class="btn btn-success">Update</button> </td>'
+                    + '<button type="submit" onclick="openUpdateModal(' + jsonObject[i]['id'] + ') " class="btn btn-success">Update</button> </td>'
                     + '</tr>'
                     );
         }
