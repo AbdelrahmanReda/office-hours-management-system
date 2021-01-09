@@ -38,14 +38,13 @@
                                             <div class="col-md-9 mb-3">
                                                 <label for="exampleFormControlSelect1">Reservation day</label>
                                                 <select class="form-control"  name="reservation_id" id="day">
-                                                    <option>Saturday</option>
-                                                    <option>Sunday</option>
-                                                    <option>Monday</option>
-                                                    <option>Tuesday</option>
-                                                    <option>Wednesday</option>
-                                                    <option>Thursday</option>
-                                                    <option>Friday</option>
-
+                                                    <option>SATURDAY</option>
+                                                    <option>SUNDAY</option>
+                                                    <option>MONDAY</option>
+                                                    <option>TUESDAY</option>
+                                                    <option>WEDNESDAY</option>
+                                                    <option>THURSDAY</option>
+                                                    <option>FRIDAY</option>
                                                 </select>
                                             </div>
 

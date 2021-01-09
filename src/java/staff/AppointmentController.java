@@ -64,7 +64,7 @@ public class AppointmentController extends HttpServlet {
 
         try {
             if (isNumeric(request.getParameter("reservation_id"))) {
-                
+
                 Integer id = Integer.parseInt(request.getParameter("reservation_id"));
 
                 if (SessionController.getSessionAtrributeValue(request, "user_type").equals("staff_member")) {
@@ -100,18 +100,22 @@ public class AppointmentController extends HttpServlet {
                 stm.executeUpdate();
 
             } else {
+
+                //bulk day
                 String day = request.getParameter("reservation_id");
 
-                PreparedStatement stmt = DatabaseConnector.getConnection().prepareCall("SELECT student.mail FROM student\n"
-                        + "INNER  JOIN appointment ON student.id = appointment.student_id\n"
-                        + "INNER JOIN office_hours  on appointment.office_hour_id = office_hours.id\n"
-                        + "WHERE appointment.staff_id = ? AND office_hours.day=?");
+                PreparedStatement stmt = DatabaseConnector.getConnection().prepareCall("SELECT DISTINCT student.mail FROM student\n"
+                        + "                      INNER  JOIN appointment ON student.id = appointment.student_id\n"
+                        + "                       INNER JOIN office_hours  on appointment.office_hour_id = office_hours.id\n"
+                        + "                       WHERE appointment.staff_id = ? AND office_hours.day=?");
 
                 stmt.setInt(1, Integer.parseInt(SessionController.getSessionAtrributeValue(request, "id")));
-                stmt.setString(1, day);
+                stmt.setString(2, day);
                 ResultSet rs = stmt.executeQuery();
                 while (rs.next()) {
                     String mail = rs.getString("mail");
+                    System.out.println("we will bulk " + mail);
+
                     notifyStudent(mail);
                 }
 
@@ -123,7 +127,6 @@ public class AppointmentController extends HttpServlet {
                         + "INNER JOIN student ON appointment.student_id = student.id WHERE office_hours.day=?)");
                 stm.setString(1, day);
                 stm.executeUpdate();
-
             }
 
         } catch (SQLException | ClassNotFoundException ex) {
@@ -142,7 +145,6 @@ public class AppointmentController extends HttpServlet {
                 }
             }
 
-
             ArrayList<Appointment> appointments = new ArrayList<>();
 
             try {
@@ -156,7 +158,7 @@ public class AppointmentController extends HttpServlet {
                             + "INNER JOIN student on appointment.student_id = student.id WHERE appointment.staff_id=?;");
 
                 } else {
-                   
+
                     stm = DatabaseConnector.getConnection().prepareStatement("SELECT * FROM appointment\n"
                             + "INNER JOIN office_hours on appointment.office_hour_id = office_hours.id\n"
                             + "INNER JOIN staff  on appointment.staff_id = staff.id\n"

@@ -84,13 +84,13 @@
                                         <div class="form-group">
                                             <label for="day">Day</label>
                                             <select class="form-control"  name="day" id="day">
-                                                <option>Saturday</option>
-                                                <option>Sunday</option>
-                                                <option>Monday</option>
-                                                <option>Tuesday</option>
-                                                <option>Wednesday</option>
-                                                <option>Thursday</option>
-                                                <option>Friday</option>
+                                                <option>SATURDAY</option>
+                                                <option>SUNDAY</option>
+                                                <option>MONDAY</option>
+                                                <option>TUESDAY</option>
+                                                <option>WEDNESDAY</option>
+                                                <option>THURSDAY</option>
+                                                <option>FRIDAY</option>
 
                                             </select>
                                         </div>
