@@ -104,22 +104,12 @@ public class OfficeHoursController extends HttpServlet {
     }
 
     public void updateOfficeHour(HttpServletRequest request) {
-            System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
-        
         try {
-            System.out.println("req is "+request);
             PreparedStatement stmt = DatabaseConnector.getConnection().prepareStatement("UPDATE office_hours set office_hours.day =? , slot = ? WHERE id=?");
-        
-            
             stmt.setString(1,request.getParameter("day") );
             stmt.setInt(2, Integer.parseInt(request.getParameter("slot")));
             stmt.setInt(3, Integer.parseInt(request.getParameter("id")));
-            System.out.println("update query is "+stmt);
             stmt.executeUpdate();
-            
-            
-            
-            System.out.println("####################################################");
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(OfficeHoursController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
@@ -153,9 +143,7 @@ public class OfficeHoursController extends HttpServlet {
             stmt.setInt(1, Integer.parseInt(request.getParameter("id")));
             stmt.executeUpdate();
 
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(OfficeHoursController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
+        } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(OfficeHoursController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -180,9 +168,6 @@ public class OfficeHoursController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            
-            
-
             if (request.getParameter("getStaffMembers") != null) {
                 request.setAttribute("OfficeHours", getStaffStaffOfficeHourse(request));
                 request.getRequestDispatcher("staff_member.jsp").forward(request, response);
@@ -198,30 +183,24 @@ public class OfficeHoursController extends HttpServlet {
 
                 if (request.getParameter("operation").equals("selection")) {
                     String json = new Gson().toJson(getOfficeHourse(request));
-                    System.out.println(json);
                     response.setContentType("application/json");
                     response.setCharacterEncoding("UTF-8");
                     response.getWriter().write(json);
-                    System.out.println("----------------------------------------------------------------------------------*-*-**-**-*-*--------------------");
 
                 }
                 if (request.getParameter("operation").equals("delete")) {
-                    System.out.println("delete operation");
                     deleteOfficeHour(request);
 
                     String json = new Gson().toJson(getOfficeHourse(request));
-                    System.out.println(json);
                     response.setContentType("application/json");
                     response.setCharacterEncoding("UTF-8");
                     response.getWriter().write(json);
-
                 }
                 if (request.getParameter("operation").equals("update")) {
-                   
+                  
                     updateOfficeHour(request);
                 }
                 if (request.getParameter("operation").equals("insertion")) {
-                    System.out.println("insert operation");
                     insertOfficeHour(request);
                 }
 

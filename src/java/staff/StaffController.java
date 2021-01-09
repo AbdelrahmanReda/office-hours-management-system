@@ -93,7 +93,6 @@ public class StaffController extends HttpServlet {
             if (request.getParameter("getStaffMembers") != null) {
 
            
-                    System.out.println("yes iam here");
                     request.setAttribute("staffMembers", getAllStafMemebrs());
                     request.getRequestDispatcher("staff_members.jsp").forward(request, response);
                     return;
