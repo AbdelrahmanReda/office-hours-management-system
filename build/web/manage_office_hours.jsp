@@ -22,10 +22,6 @@
             <!-- Page Content  -->
             <div id="content">
                 <%@ include file = "layout\navbar.jsp" %>
-
-
-
-
                 <div class="card">
                     <div class="card-header">
                         <form id="select-form"><input type="hidden" name="operation" value="selection" ></form>

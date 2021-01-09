@@ -99,12 +99,34 @@ public class AppointmentController extends HttpServlet {
             ArrayList<Appointment> appointments = new ArrayList<>();
 
             try {
-
-                PreparedStatement stm = DatabaseConnector.getConnection().prepareStatement("SELECT * FROM appointment\n"
+                PreparedStatement stm ;
+                
+                if (SessionController.getSessionAtrributeValue(request, "user_type").equals("staff_member"))
+                {
+                      stm = DatabaseConnector.getConnection().prepareStatement("SELECT * FROM appointment\n"
                         + "INNER JOIN office_hours on appointment.office_hour_id = office_hours.id\n"
                         + "INNER JOIN staff  on appointment.staff_id = staff.id\n"
                         + "INNER JOIN slot ON office_hours.slot = slot.id\n"
                         + "INNER JOIN student on appointment.student_id = student.id WHERE appointment.staff_id=?;");
+                
+                    
+                    
+                }
+                else
+                    
+                {
+                    System.out.println("i am studemt ya man");
+                 stm = DatabaseConnector.getConnection().prepareStatement("SELECT * FROM appointment\n"
+                        + "INNER JOIN office_hours on appointment.office_hour_id = office_hours.id\n"
+                        + "INNER JOIN staff  on appointment.staff_id = staff.id\n"
+                        + "INNER JOIN slot ON office_hours.slot = slot.id\n"
+                        + "INNER JOIN student on appointment.student_id = student.id WHERE appointment.student_id=?;");
+                
+                
+                }
+               
+                
+                
                 stm.setInt(1, Integer.parseInt(SessionController.getSessionAtrributeValue(request, "id").toString()));
                 ResultSet rs = stm.executeQuery();
                 while (rs.next()) {
