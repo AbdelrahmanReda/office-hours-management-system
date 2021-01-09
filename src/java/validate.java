@@ -45,8 +45,11 @@ public class validate extends HttpServlet {
                     out.print(rs.getString("user_name"));
                     out.print(rs.getString("mail"));
                     out.print(rs.getString("gender"));
+                    
                     String user_name = rs.getString("user_name");
                     HttpSession session = request.getSession();
+                     int id = rs.getInt("id");
+                    session.setAttribute("id", id);
                     session.setAttribute("email", email);
                     session.setAttribute("username", user_name);
                     session.setAttribute("password", pass);

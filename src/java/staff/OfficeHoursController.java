@@ -51,8 +51,6 @@ public class OfficeHoursController extends HttpServlet {
                 obj.staff.dapartment = rs.getString("dapartment");
                 obj.staff.user_name = rs.getString("user_name");
                 obj.staff.mail = rs.getString("mail");
-               
-
                 obj.slot.slot_name = rs.getString("slot_name");
                 obj.slot.from_hour = rs.getTime("from_hour");
                 obj.slot.to_hour = rs.getTime("to_hour");
@@ -163,6 +161,22 @@ public class OfficeHoursController extends HttpServlet {
         } catch (SQLException ex) {
             Logger.getLogger(OfficeHoursController.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    private void reserveOfficeHours(HttpServletRequest request) {
+        System.out.println("Hello 1");
+        try {
+
+            PreparedStatement stm = DatabaseConnector.getConnection().prepareStatement("INSERT INTO appointment VALUES (DEFAULT,?,?,?);");
+            stm.setInt(1, Integer.parseInt(request.getParameter("staff_id")));
+            stm.setInt(2, Integer.parseInt(SessionController.getSessionAtrributeValue(request, "id")));
+            stm.setInt(3, Integer.parseInt(request.getParameter("office_hour_id")));
+
+            stm.executeUpdate();
+
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(OfficeHoursController.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
     }
 
@@ -171,8 +185,17 @@ public class OfficeHoursController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
 
+            System.out.println("------------> " + request.getParameter("office_hour_id") + " *//*/  " + request.getParameter("staff_id"));
+
             if (request.getParameter("getStaffMembers") != null) {
                 request.setAttribute("OfficeHours", getStaffStaffOfficeHourse(request));
+                request.getRequestDispatcher("staff_member.jsp").forward(request, response);
+
+            } else if (request.getParameter("office_hour_id") != null && request.getParameter("staff_id") != null) {
+
+                System.out.println("reserve appointment");
+
+                reserveOfficeHours(request);
                 request.getRequestDispatcher("staff_member.jsp").forward(request, response);
 
             } else {
