@@ -168,6 +168,12 @@ public class OfficeHoursController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
+            
+            if (SessionController.getSessionAtrributeValue(request, "user_type") == null) {
+                response.sendRedirect("login.jsp");
+                return;
+            }
+            
             if (request.getParameter("getStaffMembers") != null) {
                 request.setAttribute("OfficeHours", getStaffStaffOfficeHourse(request));
                 request.getRequestDispatcher("staff_member.jsp").forward(request, response);

@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import Models.Student;
 import Helpers.DatabaseConnector;
+import Helpers.SessionController;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -65,6 +66,11 @@ public class StudentController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
+            
+            if (SessionController.getSessionAtrributeValue(request, "user_type") == null) {
+                response.sendRedirect("login.jsp");
+                return;
+            }
 
             if (request.getParameter("student_id") != null) {
                 Student student = new Student();

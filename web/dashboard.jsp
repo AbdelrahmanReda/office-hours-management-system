@@ -19,6 +19,7 @@
 
     <body>
         <%  response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); %>
+        
 
         <div class="wrapper">
             <!-- Sidebar  -->
@@ -27,10 +28,6 @@
             <div id="content">
                 <%@ include file = "layout\navbar.jsp" %>
 
-
-             
-
-               
 
                
             </div>

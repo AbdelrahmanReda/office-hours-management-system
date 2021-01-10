@@ -113,6 +113,12 @@ public class InboxController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
+            
+            if (SessionController.getSessionAtrributeValue(request, "user_type") == null) {
+                response.sendRedirect("login.jsp");
+                return;
+            }
+            
             /* TODO output your page here. You may use following sample code. */
             System.out.println(">>>>>>>>>>><><>" + request.getParameter("conversation_id"));
 

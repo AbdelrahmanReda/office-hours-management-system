@@ -5,6 +5,7 @@
  */
 
 import Helpers.DatabaseConnector;
+import Helpers.SessionController;
 import Mail.MailConfiguration;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -67,6 +68,14 @@ public class DashboardController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
+            
+           
+             if (SessionController.getSessionAtrributeValue(request, "user_type")==null) {
+                    response.sendRedirect("login.jsp");  
+                    return;
+
+            }
+            
 
             try {
                 sendDailyMail();

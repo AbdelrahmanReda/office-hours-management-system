@@ -106,6 +106,12 @@ public class MailController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
+            
+            if (SessionController.getSessionAtrributeValue(request, "user_type") == null) {
+                response.sendRedirect("login.jsp");
+                return;
+            }
+            
             System.out.println("sau something great");
             if (request.getParameter("recipients") != null) {
 

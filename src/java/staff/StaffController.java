@@ -6,6 +6,7 @@
 package staff;
 
 import Helpers.DatabaseConnector;
+import Helpers.SessionController;
 import Models.Staff;
 
 import java.io.IOException;
@@ -29,8 +30,6 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(name = "StaffController", urlPatterns = {"/StaffController"})
 
 public class StaffController extends HttpServlet {
-
-
 
     private ArrayList<Staff> getAllStafMemebrs() {
         try {
@@ -90,14 +89,16 @@ public class StaffController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
 
+            if (SessionController.getSessionAtrributeValue(request, "user_type") == null) {
+                response.sendRedirect("login.jsp");
+                return;
+            }
+
             if (request.getParameter("getStaffMembers") != null) {
 
-           
-                    request.setAttribute("staffMembers", getAllStafMemebrs());
-                    request.getRequestDispatcher("staff_members.jsp").forward(request, response);
-                    return;
-
-               
+                request.setAttribute("staffMembers", getAllStafMemebrs());
+                request.getRequestDispatcher("staff_members.jsp").forward(request, response);
+                return;
 
             }
 

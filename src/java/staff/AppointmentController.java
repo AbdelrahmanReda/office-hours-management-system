@@ -139,6 +139,12 @@ public class AppointmentController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
+            
+            if (SessionController.getSessionAtrributeValue(request, "user_type") == null) {
+                response.sendRedirect("login.jsp");
+                return;
+            }
+            
             if (request.getParameter("operation") != null) {
                 if (request.getParameter("operation").equals("delete")) {
                     delteAppointment(request);
