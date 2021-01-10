@@ -28,6 +28,8 @@ public class validate extends HttpServlet {
             throws ServletException, IOException, ClassNotFoundException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
+            
+            HttpSession session = request.getSession();
             String email = request.getParameter("email");
             String pass = request.getParameter("password");
             String type = request.getParameter("user_type");
@@ -39,27 +41,28 @@ public class validate extends HttpServlet {
                 stmt.setString(2, pass);
                 ResultSet rs = stmt.executeQuery();
                 boolean notExists = true;
+               
+
                 while (rs.next()) {
                     notExists = false;
 
                     out.print(rs.getString("user_name"));
                     out.print(rs.getString("mail"));
                     out.print(rs.getString("gender"));
-                    
+
                     String user_name = rs.getString("user_name");
-                    HttpSession session = request.getSession();
-                     int id = rs.getInt("id");
+                    int id = rs.getInt("id");
                     session.setAttribute("id", id);
                     session.setAttribute("email", email);
                     session.setAttribute("username", user_name);
                     session.setAttribute("password", pass);
                     session.setAttribute("user_type", "student");
-
                     response.sendRedirect("DashboardController");
 
                 }
                 if (notExists) {
-                    out.print("student not founded");
+                    session.setAttribute("wrong_credentials", "true");
+                    response.sendRedirect("login.jsp");
                 }
 
             } else {
@@ -76,7 +79,6 @@ public class validate extends HttpServlet {
                     out.print(rs.getString("gender"));
                     String user_name = rs.getString("user_name");
                     int id = rs.getInt("id");
-                    HttpSession session = request.getSession();
                     session.setAttribute("email", email);
                     session.setAttribute("id", id);
                     session.setAttribute("username", user_name);
@@ -85,7 +87,8 @@ public class validate extends HttpServlet {
                     response.sendRedirect("DashboardController");
                 }
                 if (notExists) {
-                    out.print("prof not founded");
+                    session.setAttribute("wrong_credentials", "true");
+                    response.sendRedirect("staffLogin.jsp");
                 }
 
             }

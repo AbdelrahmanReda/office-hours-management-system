@@ -23,19 +23,10 @@
                 <div class="col-lg-12 " style="padding-top: 225px">
                     <form  class="login-form" method="POST" action="validate" >
                         <%  response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); %>
-                        <%
-                            if (session.getAttribute("wrong_logging") != null) {
-                                out.print("<div class=\"alert alert-danger\"><strong > Error!</strong > Wrong Loging Data, please try again.</div> ");
-                            }
-                            session.removeAttribute("wrong_logging");
-
-                            if (session.getAttribute("email") != null) {
-                                response.sendRedirect("dashboard.jsp");
-                            }
-                        %>
+                        <%@ include file = "layout\wrong_logging_credentials.jsp" %>
                         <div class="mb-3">
                             <label for="customer_id" class="form-label">Staff Mail</label>
-                            <input type="mail" class="form-control" id="customer_id" name="email">  
+                            <input type="mail" class="form-control" id="customer_id" name="email" required>  
                         </div>
                         <div class="mb-3">
                             <label for="customer_password" class="form-label">Password</label>

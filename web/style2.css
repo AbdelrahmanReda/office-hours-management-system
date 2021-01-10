@@ -195,10 +195,7 @@ a.article:hover {
 
 /*change this settings in the bootstrap css*/
 
-.alert{
-    padding: 0px !important;
-    border-radius:0 !important;
-}
+
 
 .alert-dismissable {
     padding-right: 24px !important;
