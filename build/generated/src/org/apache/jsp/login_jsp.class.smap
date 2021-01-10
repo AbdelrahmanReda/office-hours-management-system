@@ -1,0 +1,19 @@
+SMAP
+login_jsp.java
+JSP
+*S JSP
+*F
++ 0 login.jsp
+login.jsp
++ 1 wrong_logging_credentials.jsp
+layout/wrong_logging_credentials.jsp
+*L
+5,23:49
+28:72,3
+29:75
+5#1,8:76
+12,5:84
+16,3:88
+18:91
+29#0,29:92
+*E

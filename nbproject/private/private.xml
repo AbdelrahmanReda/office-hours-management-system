@@ -3,17 +3,20 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/final/IA/IA%20final%20Project/code/IA-Project-v4/Office%20Hours/src/java/Mail/InboxController.java</file>
+            <file>file:/D:/final/IA/IA%20final%20Project/code/IA-Project-v4/Office%20Hours/src/java/student/StudentController.java</file>
             <file>file:/D:/final/IA/IA%20final%20Project/code/IA-Project-v4/Office%20Hours/src/java/Mail/MailController.java</file>
-            <file>file:/D:/final/IA/IA%20final%20Project/code/IA-Project-v4/Office%20Hours/src/java/Models/UserMessage.java</file>
-            <file>file:/D:/final/IA/IA%20final%20Project/code/IA-Project-v4/Office%20Hours/src/java/Mail/MailConfiguration.java</file>
-            <file>file:/D:/final/IA/IA%20final%20Project/code/IA-Project-v4/Office%20Hours/src/java/Models/Message.java</file>
+            <file>file:/D:/final/IA/IA%20final%20Project/code/IA-Project-v4/Office%20Hours/src/java/staff/AppointmentController.java</file>
+            <file>file:/D:/final/IA/IA%20final%20Project/code/IA-Project-v4/Office%20Hours/web/login.jsp</file>
+            <file>file:/D:/final/IA/IA%20final%20Project/code/IA-Project-v4/Office%20Hours/src/java/validate.java</file>
+            <file>file:/D:/final/IA/IA%20final%20Project/code/IA-Project-v4/Office%20Hours/src/java/DashboardController.java</file>
+            <file>file:/D:/final/IA/IA%20final%20Project/code/IA-Project-v4/Office%20Hours/src/java/staff/StaffController.java</file>
+            <file>file:/D:/final/IA/IA%20final%20Project/code/IA-Project-v4/Office%20Hours/src/java/staff/OfficeHoursController.java</file>
+            <file>file:/D:/final/IA/IA%20final%20Project/code/IA-Project-v4/Office%20Hours/src/java/Mail/InboxController.java</file>
+            <file>file:/D:/final/IA/IA%20final%20Project/code/IA-Project-v4/Office%20Hours/src/java/Helpers/SessionController.java</file>
+            <file>file:/D:/final/IA/IA%20final%20Project/code/IA-Project-v4/Office%20Hours/web/layout/wrong_logging_credentials.jsp</file>
             <file>file:/D:/final/IA/IA%20final%20Project/code/IA-Project-v4/Office%20Hours/web/style2.css</file>
-            <file>file:/D:/final/IA/IA%20final%20Project/code/IA-Project-v4/Office%20Hours/src/java/Models/Conversation.java</file>
+            <file>file:/D:/final/IA/IA%20final%20Project/code/IA-Project-v4/Office%20Hours/web/dashboard.jsp</file>
             <file>file:/D:/final/IA/IA%20final%20Project/code/IA-Project-v4/Office%20Hours/web/staffLogin.jsp</file>
-            <file>file:/D:/final/IA/IA%20final%20Project/code/IA-Project-v4/Office%20Hours/web/style.css</file>
-            <file>file:/D:/final/IA/IA%20final%20Project/code/IA-Project-v4/Office%20Hours/web/inbox.jsp</file>
-            <file>file:/D:/final/IA/IA%20final%20Project/code/IA-Project-v4/Office%20Hours/web/layout/header.jsp</file>
         </group>
     </open-files>
 </project-private>
