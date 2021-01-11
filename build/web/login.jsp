@@ -44,6 +44,7 @@
 
                                 <button style="width: 100%" type="submit" class="btn btn-primary">Sign in</button>
                                 <div class="d-flex justify-content-center align-items-center mt-2 flex-column">
+                                    <br>
                                     <small text-center>Are you Staff Member?</small>
                                     
                                     <a style="text-decoration: underline" href="staffLogin.jsp">Login in as Staff Member</a>
