@@ -11,6 +11,11 @@ public final class staffLogin_jsp extends org.apache.jasper.runtime.HttpJspBase
 
   private static java.util.List<String> _jspx_dependants;
 
+  static {
+    _jspx_dependants = new java.util.ArrayList<String>(1);
+    _jspx_dependants.add("/layout/wrong_logging_credentials.jsp");
+  }
+
   private org.glassfish.jsp.api.ResourceInjector _jspx_resourceInjector;
 
   public java.util.List<String> getDependants() {
@@ -61,28 +66,30 @@ public final class staffLogin_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.write("            <div class=\"row\" >\n");
       out.write("                <div class=\"col-lg-12 \" style=\"padding-top: 225px\">\n");
       out.write("                    <form  class=\"login-form\" method=\"POST\" action=\"validate\" >\n");
-      out.write("                        <h1 class=\"text-center\" >Welcome To </h1>\n");
-      out.write("                        <h4 class=\"text-center\">Online Banking System</h4>\n");
       out.write("                        ");
   response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); 
       out.write("\n");
       out.write("                        ");
-
-                            if (session.getAttribute("wrong_logging") != null) {
-                                out.print("<div class=\"alert alert-danger\"><strong > Error!</strong > Wrong Loging Data, please try again.</div> ");
-                            }
-                            session.removeAttribute("wrong_logging");
-                            out.print(session.getAttribute("email"));
-
-                            if (session.getAttribute("email") != null) {
-                                response.sendRedirect("dashboard.jsp");
-                            }
-                        
       out.write("\n");
+      out.write("\n");
+      out.write("\n");
+      out.write("<!DOCTYPE html>\n");
+      out.write("\n");
+
+    if (session.getAttribute("wrong_credentials") != null) {
+
+      out.write("\n");
+      out.write("<div class=\"alert alert-danger\" role=\"alert\">\n");
+      out.write("    This is a danger alert—check it out!\n");
+      out.write("</div>                            \n");
+}
+    session.removeAttribute("wrong_credentials");
+
+      out.write('\n');
       out.write("\n");
       out.write("                        <div class=\"mb-3\">\n");
-      out.write("                            <label for=\"customer_id\" class=\"form-label\">Student Mail</label>\n");
-      out.write("                            <input type=\"mail\" class=\"form-control\" id=\"customer_id\" name=\"email\">  \n");
+      out.write("                            <label for=\"customer_id\" class=\"form-label\">Staff Mail</label>\n");
+      out.write("                            <input type=\"mail\" class=\"form-control\" id=\"customer_id\" name=\"email\" required>  \n");
       out.write("                        </div>\n");
       out.write("                        <div class=\"mb-3\">\n");
       out.write("                            <label for=\"customer_password\" class=\"form-label\">Password</label>\n");
@@ -92,6 +99,11 @@ public final class staffLogin_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.write("                        </div>\n");
       out.write("                        <input type=\"hidden\"  name=\"user_type\" value=\"staff\">\n");
       out.write("                        <button style=\"width: 100%\" type=\"submit\" class=\"btn btn-primary\">Sign in</button>  \n");
+      out.write("                        <div class=\"d-flex justify-content-center align-items-center mt-2 flex-column\">\n");
+      out.write("                            <small text-center>Are you Student?</small>\n");
+      out.write("                            <br>\n");
+      out.write("                            <a style=\"text-decoration: underline\" href=\"login.jsp\">Login in as Student</a>\n");
+      out.write("                        </div>\n");
       out.write("                    </form>    \n");
       out.write("                </div>\n");
       out.write("            </div>\n");

@@ -35,6 +35,7 @@
                             </tr>
                         </thead>
                         <tbody>
+                            
 
                             <%
                                 if (request.getAttribute("staffMembers") != null) {

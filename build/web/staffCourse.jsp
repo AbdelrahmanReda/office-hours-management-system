@@ -39,7 +39,6 @@
                             <div class="form-group">
                                 <label for="course">Course Name</label>
                                 <input type="text" class="form-control" id="course" name="course"   placeholder="Linear Programming">
-                                <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
                             </div>
                             <button type="submit" class="btn btn-primary">Search Staff</button>
                         </form>
@@ -47,7 +46,6 @@
 
                         <%
                             if (request.getAttribute("staffMembers") != null) {
-
                                 ArrayList<Staff> list = (ArrayList<Staff>) request.getAttribute("staffMembers");
                                 for (int i = 0; i < list.size(); i++) {
                                     out.print(list.get(i).user_name);

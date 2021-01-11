@@ -7,11 +7,24 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 
+
 <%
+    if (session.getAttribute("user_type")!=null){
+    if (session.getAttribute("user_type").equals("student"))
+    {
+                    request.getRequestDispatcher("DashboardController").forward(request, response);
+
+    }
+    else
+    {
+                    request.getRequestDispatcher("DashboardController").forward(request, response);
+
+    }
+    }
     if (session.getAttribute("wrong_credentials") != null) {
 %>
 <div class="alert alert-danger" role="alert">
-    This is a danger alert—check it out!
+    Wrong Creditals Info
 </div>                            
 <%}
     session.removeAttribute("wrong_credentials");

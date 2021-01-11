@@ -5,10 +5,15 @@ JSP
 *F
 + 0 staffLogin.jsp
 staffLogin.jsp
++ 1 wrong_logging_credentials.jsp
+layout/wrong_logging_credentials.jsp
 *L
-5,22:44
-27:66,3
-28:69
-29,10:71
-38,21:81
+5,20:49
+25:69,3
+26:72
+5#1,8:73
+12,5:81
+16,3:85
+18:88
+26#0,25:89
 *E

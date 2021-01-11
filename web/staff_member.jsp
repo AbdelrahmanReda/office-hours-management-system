@@ -40,7 +40,6 @@
 
                             <%
                                 if (request.getAttribute("OfficeHours") != null) {
-
                                     ArrayList<OfficeHours> list = (ArrayList<OfficeHours>) request.getAttribute("OfficeHours");
                                     for (int i = 0; i < list.size(); i++) {
                                         out.print("<tr><td>" + (i + 1) + "</td>");

@@ -4,6 +4,8 @@
  * and open the template in the editor.
  */
 
+import Helpers.DatabaseConnector;
+import Mail.MailConfiguration;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -33,80 +35,59 @@ public class changeInfo extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             
-            HttpSession session = request.getSession();
-            String normalEmail = (String) session.getAttribute("email");
-            
-
-            String ChangeEmail = request.getParameter("email");
-            String password = request.getParameter("password");
-            String gender = request.getParameter("gender");
-            String coutry = request.getParameter("country");
-
-//            out.println("<h1>" + ChangeEmail + "</h1>");
-//            out.println("<h1>" + password + "</h1>");
-//            out.println("<h1>" + gender + "</h1>");
-            boolean flag=false;
-            
-            
-           
-
-            String url = "jdbc:mysql://localhost:3306/office_hours";
-            Connection con = null;
-            Statement Stmt = null;
-            ResultSet RS = null;
-
-            
+            if (request.getParameter("operation")!=null) {
+                HttpSession session = request.getSession();
+            String username = (String) session.getAttribute("username");
 
             try {
-                Class.forName("com.mysql.jdbc.Driver");
-                con = DriverManager.getConnection(url, "root", "1234");
-                Stmt = (Statement) con.createStatement();
-                
-                 RS = Stmt.executeQuery("SELECT * FROM student where email = '" + normalEmail + "'");
-                 while(RS.next()){
-                 String userName = RS.getString("username");
-                
-                if (ChangeEmail.equals("") && password.equals("") && gender.equals("") && coutry.equals("")) {
-                out.print("<p> You Didnt Change your Info</p>");}
-                
-                if(!ChangeEmail.equals("")){
-                    flag = true;
-                    PreparedStatement preparedStmt2 = con.prepareStatement("UPDATE student SET email = '" + ChangeEmail + "' WHERE username = '" + userName + "'");
-                    preparedStmt2.executeUpdate();
-                    
-                }
-                if(!password.equals("") ){
-                     flag = true;
-                    PreparedStatement preparedStmt3 = con.prepareStatement("UPDATE student SET password = '" + password + "' WHERE username = '" + userName + "'");
-                    preparedStmt3.executeUpdate();
-                    
-                }
-                if(!gender.equals("") ){
-                     flag = true;
-                    PreparedStatement preparedStmt4 = con.prepareStatement("UPDATE student SET gender = '" + gender + "' WHERE username = '" + userName + "'");
-                    preparedStmt4.executeUpdate();
-                    
-                }
-                if(!coutry.equals("")){
-                     flag = true;
-                    PreparedStatement preparedStmt5 = con.prepareStatement("UPDATE student SET country = '" + coutry + "' WHERE username = '" + userName + "'");
-                    preparedStmt5.executeUpdate();
-                }
-                if (flag == true){
-                    out.print("<p> success changes</p>");
-                }
-                else{
-                    out.print("<p> You Didnt Change your Info</p>");
-                }
 
-                 }
+                if (!request.getParameter("mail").equals("")) {
+                    PreparedStatement stmt = DatabaseConnector.getConnection().prepareStatement("UPDATE student set student.mail =?  WHERE user_name=? ;");
+                    stmt.setString(1, request.getParameter("mail"));
+                    stmt.setString(2, username);
+                    stmt.executeUpdate();
+
+                }
+                if (!request.getParameter("password").equals("")) {
+
+                    PreparedStatement stmt = DatabaseConnector.getConnection().prepareStatement("UPDATE student set student.password =?   WHERE user_name=? ;");
+                    stmt.setString(1, request.getParameter("password"));
+                    stmt.setString(2, username);
+                    stmt.executeUpdate();
+
+                }
+                if (!request.getParameter("gender").equals("")) {
+
+                    PreparedStatement stmt = DatabaseConnector.getConnection().prepareStatement("UPDATE student set student.gender =?   WHERE user_name=? ;");
+                    stmt.setString(1, request.getParameter("gender"));
+                    stmt.setString(2, username);
+                    stmt.executeUpdate();
+
+                }
+                if (!request.getParameter("country").equals("")) {
+
+                    PreparedStatement stmt = DatabaseConnector.getConnection().prepareStatement("UPDATE student set student.country =?  WHERE user_name=? ;");
+                    stmt.setString(1, request.getParameter("country"));
+                    stmt.setString(2, username);
+                    stmt.executeUpdate();
+                }
+                session.setAttribute("update_status", "true");
+
+
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }
+                
+            }
+            
+            request.getRequestDispatcher("changeInfo.jsp").forward(request, response);
+                            
+            
+            
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -120,10 +101,14 @@ public class changeInfo extends HttpServlet {
             throws ServletException, IOException {
         try {
             processRequest(request, response);
+
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(changeInfo.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(changeInfo.class
+                    .getName()).log(Level.SEVERE, null, ex);
+
         } catch (SQLException ex) {
-            Logger.getLogger(changeInfo.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(changeInfo.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -140,10 +125,14 @@ public class changeInfo extends HttpServlet {
             throws ServletException, IOException {
         try {
             processRequest(request, response);
+
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(changeInfo.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(changeInfo.class
+                    .getName()).log(Level.SEVERE, null, ex);
+
         } catch (SQLException ex) {
-            Logger.getLogger(changeInfo.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(changeInfo.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
     }
 

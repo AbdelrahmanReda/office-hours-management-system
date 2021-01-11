@@ -75,8 +75,7 @@ public class StudentController extends HttpServlet {
             if (request.getParameter("student_id") != null) {
                 Student student = new Student();
                 student = getStudentById(request);
-                System.out.println("student uis " + student.getMail());
-                //request.setAttribute("student_info", student);
+
                  request.setAttribute("studentInforamtion", student);
                  request.getRequestDispatcher("student-info.jsp").forward(request, response);
 
