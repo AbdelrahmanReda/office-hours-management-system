@@ -49,54 +49,49 @@ public class MailController extends HttpServlet {
 
     }
 
-    private void storeMessage(String message, String subject, String recipients, HttpServletRequest request) {
+    private int storeMessage(String message) throws SQLException, ClassNotFoundException {
+        PreparedStatement stm = DatabaseConnector.getConnection().prepareStatement("INSERT INTO message VALUES (DEFAULT,?,DEFAULT)", Statement.RETURN_GENERATED_KEYS);
+        stm.setString(1, message);
+        stm.executeUpdate();
 
+        try (ResultSet generatedKeys = stm.getGeneratedKeys()) {
+            if (generatedKeys.next()) {
+                return (int) generatedKeys.getLong(1);
+            } else {
+                throw new SQLException("Creating user failed, no ID obtained.");
+            }
+        }
+    }
+
+    private int StoreConversation(String subject) throws SQLException, ClassNotFoundException {
+        PreparedStatement stm = DatabaseConnector.getConnection().prepareStatement("INSERT INTO conversation VALUES (DEFAULT,?)", Statement.RETURN_GENERATED_KEYS);
+        stm.setString(1, subject);
+        stm.executeUpdate();
+
+        try (ResultSet generatedKeys = stm.getGeneratedKeys()) {
+            if (generatedKeys.next()) {
+                return (int) generatedKeys.getLong(1);
+            } else {
+                throw new SQLException("Creating user failed, no ID obtained.");
+            }
+        }
+    }
+
+    private void storeUserMessage(String message, String subject, String recipients, HttpServletRequest request) {
         try {
-            int generatedConversationId = -1;
-            int generatedMessageId=-1;
-            PreparedStatement stm = DatabaseConnector.getConnection().prepareStatement("INSERT INTO conversation VALUES (DEFAULT,?)", Statement.RETURN_GENERATED_KEYS);
-            stm.setString(1, subject);
-            stm.executeUpdate();
-            
-
-            try (ResultSet generatedKeys = stm.getGeneratedKeys()) {
-                if (generatedKeys.next()) {
-                   generatedConversationId = (int)generatedKeys.getLong(1);
-                } else {
-                    throw new SQLException("Creating user failed, no ID obtained.");
-                }
+            int generatedMessageId = storeMessage(message);
+            int generatedConversationId = StoreConversation(subject);
+            String[] recipientsArr = recipients.split(";");
+            for (String rec : recipientsArr) {
+                PreparedStatement stm = DatabaseConnector.getConnection().prepareStatement("INSERT INTO  user_message VALUES  (DEFAULT,?,?,?,?)");
+                stm.setInt(1, generatedMessageId);
+                stm.setInt(2, generatedConversationId);
+                stm.setString(3, SessionController.getSessionAtrributeValue(request, "email"));
+                stm.setString(4, rec);
+                stm.executeUpdate();
             }
-            
 
-            
-            stm = DatabaseConnector.getConnection().prepareStatement("INSERT INTO message VALUES (DEFAULT,?,DEFAULT)", Statement.RETURN_GENERATED_KEYS);
-    
-            stm.setString(1, message);
-
-            stm.executeUpdate();
-
-           
-            try (ResultSet generatedKeys = stm.getGeneratedKeys()) {
-                if (generatedKeys.next()) {
-                   generatedMessageId = (int)generatedKeys.getLong(1);
-                } else {
-                    throw new SQLException("Creating user failed, no ID obtained.");
-                }
-            }
-            
-
-            stm = DatabaseConnector.getConnection().prepareStatement("INSERT INTO  user_message VALUES  (DEFAULT,?,?,?,?)");
-            stm.setInt(1, generatedMessageId);
-            stm.setInt(2, generatedConversationId);
-            stm.setString(3, SessionController.getSessionAtrributeValue(request, "email"));
-            stm.setString(4, recipients);
-            stm.executeUpdate();
-            
-            
-            
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(MailController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
+        } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(MailController.class.getName()).log(Level.SEVERE, null, ex);
         }
 
@@ -106,13 +101,12 @@ public class MailController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            
+
             if (SessionController.getSessionAtrributeValue(request, "user_type") == null) {
                 response.sendRedirect("login.jsp");
                 return;
             }
-            
-            System.out.println("sau something great");
+
             if (request.getParameter("recipients") != null) {
 
                 String message = request.getParameter("message");
@@ -129,7 +123,7 @@ public class MailController extends HttpServlet {
 
                 request.setAttribute("status", "success");
                 request.getRequestDispatcher("compose_mail.jsp").forward(request, response);
-                storeMessage(message, subject, recipients, request);
+                storeUserMessage(message, subject, recipients, request);
                 System.out.println("called success");
 
             }

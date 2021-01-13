@@ -41,6 +41,7 @@ public class InboxController extends HttpServlet {
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
                 UserMessage obj = new UserMessage();
+                obj.conversation.id=rs.getInt("conversation.id");
                 obj.message.messageBoody = rs.getString("message");
                 obj.message.create_at = rs.getTimestamp("created_at");
                 obj.sender = rs.getNString("sender_id");
@@ -79,6 +80,7 @@ public class InboxController extends HttpServlet {
 
             while (rs.next()) {
                 UserMessage obj = new UserMessage();
+                
                 obj.conversation.id = rs.getInt("conversation_id");
                 obj.conversation.subject = rs.getString("subject");
                 messages.add(obj);

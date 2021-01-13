@@ -17,6 +17,6 @@ public class UserMessage {
     public Message message = new Message();
     public Conversation conversation = new Conversation();
     public String sender;
-    public String recipients;
+    public ArrayList <String> recipents = new ArrayList<>();
 
 }

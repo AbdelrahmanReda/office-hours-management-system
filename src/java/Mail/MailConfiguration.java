@@ -77,11 +77,16 @@ public class MailConfiguration {
         }
         return password;
     }
-
+    
+    public static String [] prepareRecipents(String reciepents){
+        return reciepents.split(";");
+        
+    }
     public static void SendEmailToStaff(String emailFrom, String emailTo, String emailSubject, String emailBody, String password) {
         String from = emailFrom;
         String pass = password;
-        String[] to = {emailTo}; // list of recipient email addresses
+        String[] to = prepareRecipents(emailTo); // list of recipient email addresses
+        System.out.println("to is "+to[0]);
         String subject = emailSubject;
         String body = emailBody;
 
@@ -108,7 +113,7 @@ public class MailConfiguration {
             for (int i = 0; i < to.length; i++) {
                 toAddress[i] = new InternetAddress(to[i]);
             }
-
+                System.out.println("address are"+toAddress);
             for (int i = 0; i < toAddress.length; i++) {
                 message.addRecipient(Message.RecipientType.TO, toAddress[i]);
             }
