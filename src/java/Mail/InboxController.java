@@ -32,16 +32,16 @@ public class InboxController extends HttpServlet {
     private ArrayList<UserMessage> showMesseages(int conversationId) throws SQLException {
         ArrayList<UserMessage> messages = new ArrayList<>();
         try {
+
             PreparedStatement stm = DatabaseConnector.getConnection().prepareStatement("SELECT * FROM  message\n"
                     + "    INNER JOIN user_message on message.id = message_id\n"
                     + "    INNER JOIN conversation on user_message.conversation_id = conversation.id\n"
-                    + "    WHERE conversation_id = ? ORDER BY created_at ASC;");
-
+                    + "    WHERE conversation_id = ? GROUP BY message_id ASC ;");
             stm.setInt(1, conversationId);
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
                 UserMessage obj = new UserMessage();
-                obj.conversation.id=rs.getInt("conversation.id");
+                obj.conversation.id = rs.getInt("conversation.id");
                 obj.message.messageBoody = rs.getString("message");
                 obj.message.create_at = rs.getTimestamp("created_at");
                 obj.sender = rs.getNString("sender_id");
@@ -57,7 +57,6 @@ public class InboxController extends HttpServlet {
     }
 
     private ArrayList<UserMessage> getConverations(HttpServletRequest request) {
-
         try {
             ArrayList<UserMessage> messages = new ArrayList<>();
 
@@ -71,22 +70,19 @@ public class InboxController extends HttpServlet {
 
             stm.setString(1, SessionController.getSessionAtrributeValue(request, "email"));
             stm.setString(2, SessionController.getSessionAtrributeValue(request, "email"));
-
             ResultSet rs = stm.executeQuery();
-            /*
-            
-            ...to be continued
-             */
 
             while (rs.next()) {
                 UserMessage obj = new UserMessage();
-                
+
                 obj.conversation.id = rs.getInt("conversation_id");
                 obj.conversation.subject = rs.getString("subject");
                 messages.add(obj);
 
             }
+            System.out.println("numbere of messages is " + messages.size());
             for (int i = 0; i < messages.size(); i++) {
+
                 stm = DatabaseConnector.getConnection().prepareStatement("SELECT message.message , message.created_at , user_message.sender_id FROM  message\n"
                         + "    INNER JOIN user_message on message.id = message_id\n"
                         + "    INNER JOIN conversation on user_message.conversation_id = conversation.id\n"
@@ -110,33 +106,27 @@ public class InboxController extends HttpServlet {
         return null;
     }
 
-    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            
+
             if (SessionController.getSessionAtrributeValue(request, "user_type") == null) {
                 response.sendRedirect("login.jsp");
                 return;
             }
-            
+
             /* TODO output your page here. You may use following sample code. */
-            System.out.println(">>>>>>>>>>><><>" + request.getParameter("conversation_id"));
-
             if (request.getParameter("conversation_id") != null) {
-               
-                request.setAttribute("conversation",  showMesseages(Integer.parseInt(request.getParameter("conversation_id"))));
+
+                request.setAttribute("conversation", showMesseages(Integer.parseInt(request.getParameter("conversation_id"))));
                 request.getRequestDispatcher("coversation.jsp").forward(request, response);
-            }
-            else
-            {
-                  request.setAttribute("conversations", getConverations(request));
-            request.getRequestDispatcher("inbox.jsp").forward(request, response);
-                
+            } else {
+                request.setAttribute("conversations", getConverations(request));
+                request.getRequestDispatcher("inbox.jsp").forward(request, response);
+
             }
 
-          
         } catch (SQLException ex) {
             Logger.getLogger(InboxController.class.getName()).log(Level.SEVERE, null, ex);
         }
