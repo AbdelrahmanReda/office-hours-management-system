@@ -14,6 +14,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -55,7 +57,6 @@ public class InboxController extends HttpServlet {
         return null;
 
     }
-
     private ArrayList<UserMessage> getConverations(HttpServletRequest request) {
         try {
             ArrayList<UserMessage> messages = new ArrayList<>();
@@ -71,18 +72,15 @@ public class InboxController extends HttpServlet {
             stm.setString(1, SessionController.getSessionAtrributeValue(request, "email"));
             stm.setString(2, SessionController.getSessionAtrributeValue(request, "email"));
             ResultSet rs = stm.executeQuery();
-
             while (rs.next()) {
                 UserMessage obj = new UserMessage();
 
                 obj.conversation.id = rs.getInt("conversation_id");
                 obj.conversation.subject = rs.getString("subject");
                 messages.add(obj);
-
             }
             System.out.println("numbere of messages is " + messages.size());
             for (int i = 0; i < messages.size(); i++) {
-
                 stm = DatabaseConnector.getConnection().prepareStatement("SELECT message.message , message.created_at , user_message.sender_id FROM  message\n"
                         + "    INNER JOIN user_message on message.id = message_id\n"
                         + "    INNER JOIN conversation on user_message.conversation_id = conversation.id\n"
@@ -95,9 +93,7 @@ public class InboxController extends HttpServlet {
                     messages.get(i).message.create_at = rs.getTimestamp("created_at");
                     messages.get(i).sender = rs.getString("sender_id");
                 }
-
             }
-
             return messages;
 
         } catch (SQLException | ClassNotFoundException ex) {
@@ -106,8 +102,9 @@ public class InboxController extends HttpServlet {
         return null;
     }
 
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+   
+
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
 
@@ -115,7 +112,7 @@ public class InboxController extends HttpServlet {
                 response.sendRedirect("login.jsp");
                 return;
             }
-
+        
             /* TODO output your page here. You may use following sample code. */
             if (request.getParameter("conversation_id") != null) {
 
@@ -124,9 +121,7 @@ public class InboxController extends HttpServlet {
             } else {
                 request.setAttribute("conversations", getConverations(request));
                 request.getRequestDispatcher("inbox.jsp").forward(request, response);
-
             }
-
         } catch (SQLException ex) {
             Logger.getLogger(InboxController.class.getName()).log(Level.SEVERE, null, ex);
         }

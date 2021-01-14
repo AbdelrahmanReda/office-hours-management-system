@@ -8,12 +8,12 @@ staffLogin.jsp
 + 1 wrong_logging_credentials.jsp
 layout/wrong_logging_credentials.jsp
 *L
-5,20:49
-25:69,3
-26:72
-5#1,8:73
-12,5:81
-16,3:85
-18:88
-26#0,25:89
+5,25:49
+30:74,3
+31:77
+5#1,21:78
+25,5:99
+29,3:103
+31:106
+31#0,29:107
 *E

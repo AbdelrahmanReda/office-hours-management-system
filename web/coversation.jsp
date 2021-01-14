@@ -60,12 +60,14 @@
 
                                 </div>
                                 <div class="card-footer">
-                                    <form>
+                                    <form method="POST" action="MailController">
+                                        <input type="hidden" name="operation" value="reply">
                                         <input type="hidden" name="conversation_id" value= <% out.print(list.get(0).conversation.id); %> >
                                         <div class="form-group">
                                             <label for="exampleFormControlTextarea1">Example textarea</label>
-                                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="4"></textarea>
+                                            <textarea class="form-control" name="message_body" id="exampleFormControlTextarea1" rows="4"></textarea>
                                         </div>
+                                        
                                         <button type="submit" class="btn btn-primary">send Message</button>
 
                                     </form>

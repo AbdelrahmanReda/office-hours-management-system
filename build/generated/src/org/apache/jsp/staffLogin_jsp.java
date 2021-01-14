@@ -65,46 +65,68 @@ public final class staffLogin_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.write("        <div class=\"container\">\n");
       out.write("            <div class=\"row\" >\n");
       out.write("                <div class=\"col-lg-12 \" style=\"padding-top: 225px\">\n");
-      out.write("                    <form  class=\"login-form\" method=\"POST\" action=\"validate\" >\n");
-      out.write("                        ");
+      out.write("                    <div class=\"card login-form \">\n");
+      out.write("                        <div class=\"card-header\">\n");
+      out.write("                            <h6>Login in as staff member</h6>\n");
+      out.write("                        </div>\n");
+      out.write("                        <div class=\"card-body \">\n");
+      out.write("                            <form  class=\"\" method=\"POST\" action=\"validate\" >\n");
+      out.write("                                ");
   response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); 
       out.write("\n");
-      out.write("                        ");
+      out.write("                                ");
       out.write("\n");
       out.write("\n");
       out.write("\n");
       out.write("<!DOCTYPE html>\n");
       out.write("\n");
+      out.write("\n");
 
+    if (session.getAttribute("user_type")!=null){
+    if (session.getAttribute("user_type").equals("student"))
+    {
+                    request.getRequestDispatcher("DashboardController").forward(request, response);
+
+    }
+    else
+    {
+                    request.getRequestDispatcher("DashboardController").forward(request, response);
+
+    }
+    }
     if (session.getAttribute("wrong_credentials") != null) {
 
       out.write("\n");
       out.write("<div class=\"alert alert-danger\" role=\"alert\">\n");
-      out.write("    This is a danger alert—check it out!\n");
+      out.write("    Wrong Creditals Info\n");
       out.write("</div>                            \n");
 }
     session.removeAttribute("wrong_credentials");
 
       out.write('\n');
       out.write("\n");
-      out.write("                        <div class=\"mb-3\">\n");
-      out.write("                            <label for=\"customer_id\" class=\"form-label\">Staff Mail</label>\n");
-      out.write("                            <input type=\"mail\" class=\"form-control\" id=\"customer_id\" name=\"email\" required>  \n");
+      out.write("                                <div class=\"mb-3\">\n");
+      out.write("                                    <label for=\"customer_id\" class=\"form-label\">Staff Mail</label>\n");
+      out.write("                                    <input type=\"mail\" class=\"form-control\" id=\"customer_id\" name=\"email\" required>  \n");
+      out.write("                                </div>\n");
+      out.write("                                <div class=\"mb-3\">\n");
+      out.write("                                    <label for=\"customer_password\" class=\"form-label\">Password</label>\n");
+      out.write("                                    <input type=\"password\" class=\"form-control\" id=\"customer_password\" name=\"password\">\n");
+      out.write("                                </div>\n");
+      out.write("                                <div class=\"mb-3\">\n");
+      out.write("                                </div>\n");
+      out.write("                                <input type=\"hidden\"  name=\"user_type\" value=\"staff\">\n");
+      out.write("                                <button style=\"width: 100%\" type=\"submit\" class=\"btn btn-primary\">Sign in</button>  \n");
+      out.write("                                <div class=\"d-flex justify-content-center align-items-center mt-2 flex-column\">\n");
+      out.write("                                    <small text-center>Are you Student?</small>\n");
+      out.write("                                   \n");
+      out.write("                                    <a style=\"text-decoration: underline\" href=\"login.jsp\">Login in as Student</a>\n");
+      out.write("                                </div>\n");
+      out.write("                            </form>    \n");
       out.write("                        </div>\n");
-      out.write("                        <div class=\"mb-3\">\n");
-      out.write("                            <label for=\"customer_password\" class=\"form-label\">Password</label>\n");
-      out.write("                            <input type=\"password\" class=\"form-control\" id=\"customer_password\" name=\"password\">\n");
-      out.write("                        </div>\n");
-      out.write("                        <div class=\"mb-3\">\n");
-      out.write("                        </div>\n");
-      out.write("                        <input type=\"hidden\"  name=\"user_type\" value=\"staff\">\n");
-      out.write("                        <button style=\"width: 100%\" type=\"submit\" class=\"btn btn-primary\">Sign in</button>  \n");
-      out.write("                        <div class=\"d-flex justify-content-center align-items-center mt-2 flex-column\">\n");
-      out.write("                            <small text-center>Are you Student?</small>\n");
-      out.write("                            <br>\n");
-      out.write("                            <a style=\"text-decoration: underline\" href=\"login.jsp\">Login in as Student</a>\n");
-      out.write("                        </div>\n");
-      out.write("                    </form>    \n");
+      out.write("                    </div>\n");
+      out.write("\n");
+      out.write("\n");
       out.write("                </div>\n");
       out.write("            </div>\n");
       out.write("        </div>\n");

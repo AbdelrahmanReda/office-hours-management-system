@@ -13,6 +13,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -35,17 +37,42 @@ public class MailController extends HttpServlet {
 
     }
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     private void getMail(HttpServletRequest request) {
         String email = SessionController.getSessionAtrributeValue(request, "email");
+
+    }
+
+    private Set<String> getRecipents(HttpServletRequest request) throws ClassNotFoundException, SQLException {
+        PreparedStatement stm = DatabaseConnector.getConnection().prepareStatement("SELECT sender_id , recipient_id FROM user_message\n"
+                + "WHERE   user_message.conversation_id=?");
+        stm.setInt(1, Integer.parseInt(request.getParameter("conversation_id")));
+        ResultSet rs = stm.executeQuery();
+        Set<String> recipentes = new HashSet<String>();
+        while (rs.next()) {
+            recipentes.add(rs.getString("sender_id"));
+            recipentes.add(rs.getString("recipient_id"));
+        }
+        recipentes.remove(SessionController.getSessionAtrributeValue(request, "email"));
+        return recipentes;
+    }
+
+    private void storeUserMessageReply(HttpServletRequest request) throws ClassNotFoundException, SQLException {
+        Set<String> recipents = getRecipents(request);
+        int messageId = storeMessage(request.getParameter("message_body"));
+
+        for (String recipent : recipents) {
+
+            PreparedStatement stm = DatabaseConnector.getConnection().prepareStatement("INSERT INTO  user_message VALUES  (DEFAULT,?,?,?,?)");
+            stm.setInt(1, messageId);
+            stm.setInt(2, Integer.parseInt(request.getParameter("conversation_id")));
+            stm.setString(3, SessionController.getSessionAtrributeValue(request, "email"));
+            stm.setString(4, recipent);
+
+            stm.executeUpdate();
+
+        }
+        
+        //MailConfiguration.SendEmailToStaff(from, recipients, subject, message, pass);
 
     }
 
@@ -98,13 +125,23 @@ public class MailController extends HttpServlet {
     }
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException, ClassNotFoundException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
 
             if (SessionController.getSessionAtrributeValue(request, "user_type") == null) {
                 response.sendRedirect("login.jsp");
                 return;
+            }
+
+            if (request.getParameter("operation") != null) {
+                if (request.getParameter("operation").equals("reply")) {
+                    System.out.println("request has" + request);
+                    storeUserMessageReply(request);
+                    System.out.println("Hello amy heeeeeeeeeeeeeeeeeeeeeeeeer");
+                    request.getRequestDispatcher("InboxController").forward(request, response);
+                    return;
+                }
             }
 
             if (request.getParameter("recipients") != null) {
@@ -145,7 +182,13 @@ public class MailController extends HttpServlet {
             throws ServletException, IOException {
 
         request.getRequestDispatcher("compose_mail.jsp").forward(request, response);
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(MailController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(MailController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -159,14 +202,15 @@ public class MailController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(MailController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(MailController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
     @Override
     public String getServletInfo() {
         return "Short description";
