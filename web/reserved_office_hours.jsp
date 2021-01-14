@@ -32,6 +32,7 @@
                     <div class="card-body">
                         <div class="container-fluid" >
                             <div class="row" >
+                                <%if (session.getAttribute("user_type").equals("staff")) {%>
                                 <div class="col-lg-12" >
                                     <form class="needs-validation" action="AppointmentController" method="POST" >
                                         <div class="form-row">
@@ -51,15 +52,11 @@
                                             <div class="col-md-3 mb-3" style="display: flex; flex-direction: column-reverse;">
                                                 <input type="hidden" name="operation" value="delete">
                                                 <button class="btn btn-danger" type="submit">Cancel Reservation</button>
-
-
                                             </div>
-
                                         </div>
-
-
                                     </form> 
                                 </div>
+                                <%}%>
                                 <div class="col-lg-12">
 
                                     <table id="example" class="table table-striped table-bordered" style="width:100%">
@@ -70,18 +67,24 @@
                                                 <th>Slot</th>
                                                 <th>from</th>
                                                 <th>to</th>
+                                                    <%if (session.getAttribute("user_type").equals("staff")) {%>
                                                 <th>Student</th>
                                                 <th>Student Mail</th>
                                                 <th>Level</th>
+                                                    <%}
+                                                    else{
+                                                    out.print("<th>Staff</td>");
+                                                    }
+
+                                                
+                                                    %>
                                                 <th>Operation</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <%
-                                                // retrieve your list from the request, with casting 
                                                 ArrayList<Appointment> list = (ArrayList<Appointment>) request.getAttribute("appointments");
 
-                                                // print the information about every category of the list
                                                 for (int i = 0; i < list.size(); i++) {
                                                     out.print("<tr>");
                                                     out.print("<td>" + (i + 1) + "</td>");
@@ -89,9 +92,15 @@
                                                     out.print("<td>" + list.get(i).officeHours.slot.slot_name + "</td>");
                                                     out.print("<td>" + list.get(i).officeHours.slot.from_hour + "</td>");
                                                     out.print("<td>" + list.get(i).officeHours.slot.to_hour + "</td>");
+                                                    if (session.getAttribute("user_type").equals("staff")){
                                                     out.print("<td>" + list.get(i).student.user_name + "</td>");
                                                     out.print("<td>" + list.get(i).student.mail + "</td>");
                                                     out.print("<td>" + list.get(i).student.student_level + "</td>");
+                                                    }
+                                                    else
+                                                    {
+                                                         out.print("<td>" + list.get(i).staff.user_name + "</td>");
+                                                    }
                                                     out.print("<td> "); %>
                                         <form action="AppointmentController" method="POST" style="display: flex; justify-content: center;">
                                             <input type="hidden" name="operation" value="delete">

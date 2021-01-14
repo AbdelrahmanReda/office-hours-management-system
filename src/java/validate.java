@@ -45,17 +45,15 @@ public class validate extends HttpServlet {
 
                 while (rs.next()) {
                     notExists = false;
-
                     out.print(rs.getString("user_name"));
                     out.print(rs.getString("mail"));
                     out.print(rs.getString("gender"));
-
                     String user_name = rs.getString("user_name");
                     int id = rs.getInt("id");
                     session.setAttribute("id", id);
                     session.setAttribute("email", email);
                     session.setAttribute("username", user_name);
-                    session.setAttribute("password", pass);
+                    session.setAttribute("mail_password", rs.getString("mail_password"));
                     session.setAttribute("user_type", "student");
                     response.sendRedirect("DashboardController");
 
@@ -82,7 +80,7 @@ public class validate extends HttpServlet {
                     session.setAttribute("email", email);
                     session.setAttribute("id", id);
                     session.setAttribute("username", user_name);
-                    session.setAttribute("password", pass);
+                    session.setAttribute("mail_password", rs.getString("mail_password"));
                     session.setAttribute("user_type", "staff_member");
                     response.sendRedirect("DashboardController");
                 }

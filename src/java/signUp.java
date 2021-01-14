@@ -33,39 +33,38 @@ public class signUp extends HttpServlet {
             throws ServletException, IOException, ClassNotFoundException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-
             System.out.println("reqest has " + request);
             String password = MailConfiguration.generatePassword(8).toString();
-
             if (request.getParameter("user_type").equals("staff")) {
-
                 MailConfiguration.SendEmail(password, request.getParameter("email"));
-                PreparedStatement statement = DatabaseConnector.getConnection().prepareStatement("INSERT INTO staff VALUES (DEFAULT,?,?,?,?,?,?);");
+                PreparedStatement statement = DatabaseConnector.getConnection().prepareStatement("INSERT INTO staff VALUES (DEFAULT,?,?,?,?,?,?,?,?,?);");
                 statement.setString(1, request.getParameter("user_name"));
-                statement.setString(2, request.getParameter("email"));
-                statement.setString(3, password);
-                statement.setString(4, request.getParameter("gender"));
-                statement.setString(5, request.getParameter("country"));
-                statement.setString(6, "IS");
+                statement.setString(2, request.getParameter("first_name"));
+                statement.setString(3, request.getParameter("last_name"));
+                statement.setString(4, request.getParameter("email"));
+                statement.setString(5, password);
+                statement.setString(6, request.getParameter("mail_password"));
+                statement.setString(7, request.getParameter("gender"));
+                statement.setString(8, request.getParameter("country"));
+                statement.setString(9, "IS");
                 statement.executeUpdate();
                 request.getRequestDispatcher("staffLogin.jsp").forward(request, response);
-
             } else {
-
                 MailConfiguration.SendEmail(password, request.getParameter("email"));
-                PreparedStatement statement = DatabaseConnector.getConnection().prepareStatement("INSERT INTO student VALUES (DEFAULT,?,?,?,?,?,?,?);");
+                PreparedStatement statement = DatabaseConnector.getConnection().prepareStatement("INSERT INTO student VALUES (DEFAULT,?,?,?,?,?,?,?,?,?,?);");
                 statement.setString(1, request.getParameter("user_name"));
-                statement.setString(2, request.getParameter("email"));
-                statement.setString(3, password);
-                statement.setString(4, request.getParameter("gender"));
-                statement.setString(5, request.getParameter("country"));
-                statement.setInt(6, 3);
-                statement.setInt(7, 3);
+                statement.setString(2, request.getParameter("first_name"));
+                statement.setString(3, request.getParameter("last_name"));
+                statement.setString(4, request.getParameter("email"));
+                statement.setString(5, password);
+                statement.setString(6, request.getParameter("mail_password"));
+                statement.setString(7, request.getParameter("gender"));
+                statement.setString(8, request.getParameter("country"));
+                statement.setInt(9, 3);
+                statement.setInt(10, 3);
                 statement.executeUpdate();
                 request.getRequestDispatcher("login.jsp").forward(request, response);
-
             }
-
         } catch (SQLException ex) {
             Logger.getLogger(signUp.class.getName()).log(Level.SEVERE, null, ex);
         }

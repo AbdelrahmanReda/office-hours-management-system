@@ -145,38 +145,24 @@ public class MailController extends HttpServlet {
             }
 
             if (request.getParameter("recipients") != null) {
-
                 String message = request.getParameter("message");
                 String subject = request.getParameter("subject");
                 String recipients = request.getParameter("recipients");
-
                 System.out.println("message " + message);
                 System.out.println("subject " + subject);
                 System.out.println("recipients " + recipients);
-
                 String from = "boodycat009@gmail.com";
                 String pass = "2266554488";
                 MailConfiguration.SendEmailToStaff(from, recipients, subject, message, pass);
-
                 request.setAttribute("status", "success");
                 request.getRequestDispatcher("compose_mail.jsp").forward(request, response);
                 storeUserMessage(message, subject, recipients, request);
                 System.out.println("called success");
-
             }
-
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

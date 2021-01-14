@@ -30,9 +30,9 @@ public class StudentController extends HttpServlet {
 
     public Student getStudentById(HttpServletRequest request) {
         try {
-            int id = Integer.parseInt(request.getParameter("student_id"));
-            PreparedStatement statement = DatabaseConnector.getConnection().prepareStatement("SELECT * FROM student WHERE id=?");
-            statement.setInt(1, id);
+        
+            PreparedStatement statement = DatabaseConnector.getConnection().prepareStatement("SELECT * FROM student WHERE student_id=?");
+            statement.setString(1, request.getParameter("student_id"));
             ResultSet rs = statement.executeQuery();
             Student student = new Student();
             while (rs.next()) {

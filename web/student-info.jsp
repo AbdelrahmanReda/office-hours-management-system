@@ -34,7 +34,7 @@
 
                                                 <div class="form-group">
                                                     <label for="student-id">Student id</label>
-                                                    <input type="number" class="form-control" id="student-id" name="student_id" placeholder="20170145">
+                                                    <input type="number" class="form-control" min="1" id="student-id" name="student_id" placeholder="20170145">
                                                 </div>
 
                                                 <button type="submit" class="btn btn-primary">Search for Student</button>

@@ -181,6 +181,7 @@ public class AppointmentController extends HttpServlet {
                     appointment.student.user_name = rs.getString("student.user_name");
                     appointment.student.mail = rs.getString("student.mail");
                     appointment.student.student_level = rs.getInt("student_level");
+                    appointment.staff.user_name=rs.getString("staff.user_name");
                     appointment.officeHours.day = rs.getString("day");
                     appointment.officeHours.slot.slot_name = rs.getString("slot_name");
                     appointment.officeHours.slot.from_hour = rs.getTime("from_hour");
