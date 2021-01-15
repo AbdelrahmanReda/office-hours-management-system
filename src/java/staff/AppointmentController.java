@@ -49,7 +49,7 @@ public class AppointmentController extends HttpServlet {
             notifyStudent(rs.getString("mail"), request);
         }
     }
-
+    
     private void notifyStudent(String studentMail, HttpServletRequest request) {
         String from = SessionController.getSessionAtrributeValue(request, "email");
         String pass = SessionController.getSessionAtrributeValue(request, "mail_password");

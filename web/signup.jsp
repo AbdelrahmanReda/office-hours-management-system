@@ -26,6 +26,8 @@
                         </div>
                         <div class="card-body">
                             <form   method="POST" action="signUp" >
+                                <%  response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); %>
+                                <%@ include file = "layout\invalide_registration.jsp" %>
                                 <div class="mb-3">
                                     <label for="first-name" class="form-label">First Name</label>
                                     <input type="text" class="form-control" id="first-name" name="first_name" required>

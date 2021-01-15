@@ -5,6 +5,15 @@ JSP
 *F
 + 0 signup.jsp
 signup.jsp
++ 1 invalide_registration.jsp
+layout/invalide_registration.jsp
 *L
-1,449:44
+5,24:49
+29:73,3
+30:76
+5#1,7:77
+11,5:84
+15,3:88
+17,4:91
+30#0,333:94
 *E

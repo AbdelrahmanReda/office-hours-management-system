@@ -21,6 +21,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -28,7 +29,13 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(urlPatterns = {"/signUp"})
 public class signUp extends HttpServlet {
-
+    private boolean hasRows(PreparedStatement statement) throws SQLException{
+    ResultSet rs = statement.executeQuery();
+        while (rs.next()) {        
+            return true;  
+        }
+    return false;
+    }
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, ClassNotFoundException {
         response.setContentType("text/html;charset=UTF-8");
@@ -36,8 +43,17 @@ public class signUp extends HttpServlet {
             System.out.println("reqest has " + request);
             String password = MailConfiguration.generatePassword(8).toString();
             if (request.getParameter("user_type").equals("staff")) {
+                 PreparedStatement statement = DatabaseConnector.getConnection().prepareStatement("SELECT * FROM staff WHERE  mail=? OR mail=?;");
+                statement.setString(1, request.getParameter("email"));
+                statement.setString(2, request.getParameter("user_name"));
+                if (hasRows(statement)) {
+                    HttpSession session = request.getSession();
+                    session.setAttribute("invalid_data", "true");
+                    request.getRequestDispatcher("signup.jsp").forward(request, response);
+                    return;  
+                }
                 MailConfiguration.SendEmail(password, request.getParameter("email"));
-                PreparedStatement statement = DatabaseConnector.getConnection().prepareStatement("INSERT INTO staff VALUES (DEFAULT,?,?,?,?,?,?,?,?,?);");
+                statement = DatabaseConnector.getConnection().prepareStatement("INSERT INTO staff VALUES (DEFAULT,?,?,?,?,?,?,?,?,?);");
                 statement.setString(1, request.getParameter("user_name"));
                 statement.setString(2, request.getParameter("first_name"));
                 statement.setString(3, request.getParameter("last_name"));
@@ -50,8 +66,19 @@ public class signUp extends HttpServlet {
                 statement.executeUpdate();
                 request.getRequestDispatcher("staffLogin.jsp").forward(request, response);
             } else {
+     
+                PreparedStatement statement = DatabaseConnector.getConnection().prepareStatement("SELECT * FROM student WHERE  mail=? OR mail=?;");
+                statement.setString(1, request.getParameter("email"));
+                statement.setString(2, request.getParameter("user_name"));
+                if (hasRows(statement)) {
+                    HttpSession session = request.getSession();
+                    session.setAttribute("invalid_data", "true");
+                    request.getRequestDispatcher("signup.jsp").forward(request, response);
+                    return;
+                    
+                }
                 MailConfiguration.SendEmail(password, request.getParameter("email"));
-                PreparedStatement statement = DatabaseConnector.getConnection().prepareStatement("INSERT INTO student VALUES (DEFAULT,?,?,?,?,?,?,?,?,?,?);");
+                statement = DatabaseConnector.getConnection().prepareStatement("INSERT INTO student VALUES (DEFAULT,?,?,?,?,?,?,?,?,?,?);");
                 statement.setString(1, request.getParameter("user_name"));
                 statement.setString(2, request.getParameter("first_name"));
                 statement.setString(3, request.getParameter("last_name"));
@@ -66,7 +93,13 @@ public class signUp extends HttpServlet {
                 request.getRequestDispatcher("login.jsp").forward(request, response);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(signUp.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
+
+            return;
+        }
+        finally{
+        
+        
         }
     }
 
