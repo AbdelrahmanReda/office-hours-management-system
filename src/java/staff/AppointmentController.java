@@ -39,21 +39,18 @@ public class AppointmentController extends HttpServlet {
         }
     }
 
-    private void notifyStudent(String studentMail) {
-        studentMail = "boodycat09@gmail.com";
-        String from = "boodycat009@gmail.com";
-        String pass = "2266554488";
+    private void notifyStudent(String studentMail,HttpServletRequest request) {
+        String from = SessionController.getSessionAtrributeValue(request, "email");
+        String pass = SessionController.getSessionAtrributeValue(request, "mail_password");
         String recipients = studentMail;
         String subject = "Meeting Cancelation";
         String message = "We are sorry we well cancel the meeting";
         MailConfiguration.SendEmailToStaff(from, recipients, subject, message, pass);
-
     }
 
-    private void notifyStaffMember(String staffMail) {
-        staffMail = "boodycat09@gmail.com";
-        String from = "boodycat009@gmail.com";
-        String pass = "2266554488";
+    private void notifyStaffMember(String staffMail,HttpServletRequest request) {
+        String from = SessionController.getSessionAtrributeValue(request, "email");
+        String pass = SessionController.getSessionAtrributeValue(request, "mail_password");
         String recipients = staffMail;
         String subject = "Meeting Cancelation";
         String message = "We are sorry we well cancel the meeting";
@@ -79,7 +76,7 @@ public class AppointmentController extends HttpServlet {
                         studentMail = rs.getString("mail");
                     }
 
-                    notifyStudent(studentMail);
+                    notifyStudent(studentMail,request);
 
                 } else {
 
@@ -91,7 +88,7 @@ public class AppointmentController extends HttpServlet {
                     ResultSet rs = stm.executeQuery();
                     while (rs.next()) {
                         StaffMail = rs.getString("mail");
-                        notifyStaffMember(StaffMail);
+                        notifyStaffMember(StaffMail,request);
                     }
 
                 }
@@ -105,9 +102,9 @@ public class AppointmentController extends HttpServlet {
                 String day = request.getParameter("reservation_id");
 
                 PreparedStatement stmt = DatabaseConnector.getConnection().prepareCall("SELECT DISTINCT student.mail FROM student\n"
-                        + "                      INNER  JOIN appointment ON student.id = appointment.student_id\n"
-                        + "                       INNER JOIN office_hours  on appointment.office_hour_id = office_hours.id\n"
-                        + "                       WHERE appointment.staff_id = ? AND office_hours.day=?");
+                        + "INNER  JOIN appointment ON student.id = appointment.student_id\n"
+                        + "INNER JOIN office_hours  on appointment.office_hour_id = office_hours.id\n"
+                        + "WHERE appointment.staff_id = ? AND office_hours.day=?");
 
                 stmt.setInt(1, Integer.parseInt(SessionController.getSessionAtrributeValue(request, "id")));
                 stmt.setString(2, day);
@@ -116,7 +113,7 @@ public class AppointmentController extends HttpServlet {
                     String mail = rs.getString("mail");
                     System.out.println("we will bulk " + mail);
 
-                    notifyStudent(mail);
+                    notifyStudent(mail,request);
                 }
 
                 PreparedStatement stm = DatabaseConnector.getConnection().prepareStatement("DELETE  FROM  appointment WHERE id IN (\n"
@@ -139,12 +136,12 @@ public class AppointmentController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            
+
             if (SessionController.getSessionAtrributeValue(request, "user_type") == null) {
                 response.sendRedirect("login.jsp");
                 return;
             }
-            
+
             if (request.getParameter("operation") != null) {
                 if (request.getParameter("operation").equals("delete")) {
                     delteAppointment(request);
@@ -181,7 +178,9 @@ public class AppointmentController extends HttpServlet {
                     appointment.student.user_name = rs.getString("student.user_name");
                     appointment.student.mail = rs.getString("student.mail");
                     appointment.student.student_level = rs.getInt("student_level");
-                    appointment.staff.user_name=rs.getString("staff.user_name");
+                    appointment.staff.user_name = rs.getString("staff.user_name");
+                    appointment.staff.first_name = rs.getString("staff.first_name");
+                    appointment.staff.last_name = rs.getString("staff.last_name");
                     appointment.officeHours.day = rs.getString("day");
                     appointment.officeHours.slot.slot_name = rs.getString("slot_name");
                     appointment.officeHours.slot.from_hour = rs.getTime("from_hour");

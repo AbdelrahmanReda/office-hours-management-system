@@ -5,9 +5,6 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-
-<!DOCTYPE html>
 <html>
     <head>
         <title>TODO supply a title</title>
@@ -43,7 +40,6 @@
                                 <button style="width: 100%" type="submit" class="btn btn-primary">Sign in</button>  
                                 <div class="d-flex justify-content-center align-items-center mt-2 flex-column">
                                     <small text-center>Are you Student?</small>
-                                   
                                     <a style="text-decoration: underline" href="login.jsp">Login in as Student</a>
                                 </div>
                             </form>    

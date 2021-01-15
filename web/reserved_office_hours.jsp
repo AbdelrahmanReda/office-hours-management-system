@@ -20,10 +20,6 @@
             <!-- Page Content  -->
             <div id="content">
                 <%@ include file = "layout\navbar.jsp" %>
-
-
-
-
                 <div class="card">
                     <div class="card-header">
                         <form id="select-form"><input type="hidden" name="operation" value="selection" ></form>
@@ -32,7 +28,7 @@
                     <div class="card-body">
                         <div class="container-fluid" >
                             <div class="row" >
-                                <%if (session.getAttribute("user_type").equals("staff")) {%>
+                                <%if (session.getAttribute("user_type").equals("staff_member")) {%>
                                 <div class="col-lg-12" >
                                     <form class="needs-validation" action="AppointmentController" method="POST" >
                                         <div class="form-row">
@@ -48,7 +44,6 @@
                                                     <option>FRIDAY</option>
                                                 </select>
                                             </div>
-
                                             <div class="col-md-3 mb-3" style="display: flex; flex-direction: column-reverse;">
                                                 <input type="hidden" name="operation" value="delete">
                                                 <button class="btn btn-danger" type="submit">Cancel Reservation</button>
@@ -58,7 +53,6 @@
                                 </div>
                                 <%}%>
                                 <div class="col-lg-12">
-
                                     <table id="example" class="table table-striped table-bordered" style="width:100%">
                                         <thead>
                                             <tr>
@@ -67,7 +61,7 @@
                                                 <th>Slot</th>
                                                 <th>from</th>
                                                 <th>to</th>
-                                                    <%if (session.getAttribute("user_type").equals("staff")) {%>
+                                                    <%if (session.getAttribute("user_type").equals("staff_member")) {%>
                                                 <th>Student</th>
                                                 <th>Student Mail</th>
                                                 <th>Level</th>
@@ -75,8 +69,6 @@
                                                     else{
                                                     out.print("<th>Staff</td>");
                                                     }
-
-                                                
                                                     %>
                                                 <th>Operation</th>
                                             </tr>
@@ -84,7 +76,6 @@
                                         <tbody>
                                             <%
                                                 ArrayList<Appointment> list = (ArrayList<Appointment>) request.getAttribute("appointments");
-
                                                 for (int i = 0; i < list.size(); i++) {
                                                     out.print("<tr>");
                                                     out.print("<td>" + (i + 1) + "</td>");
@@ -92,14 +83,14 @@
                                                     out.print("<td>" + list.get(i).officeHours.slot.slot_name + "</td>");
                                                     out.print("<td>" + list.get(i).officeHours.slot.from_hour + "</td>");
                                                     out.print("<td>" + list.get(i).officeHours.slot.to_hour + "</td>");
-                                                    if (session.getAttribute("user_type").equals("staff")){
+                                                    if (session.getAttribute("user_type").equals("staff_member")){
                                                     out.print("<td>" + list.get(i).student.user_name + "</td>");
                                                     out.print("<td>" + list.get(i).student.mail + "</td>");
                                                     out.print("<td>" + list.get(i).student.student_level + "</td>");
                                                     }
                                                     else
                                                     {
-                                                         out.print("<td>" + list.get(i).staff.user_name + "</td>");
+                                                         out.print("<td>" + list.get(i).staff.first_name+" "+list.get(i).staff.last_name + "</td>");
                                                     }
                                                     out.print("<td> "); %>
                                         <form action="AppointmentController" method="POST" style="display: flex; justify-content: center;">
@@ -107,14 +98,7 @@
                                             <input type="hidden" name="reservation_id" value= <% out.print(list.get(i).id); %> >
                                             <button class="btn btn-danger" > Delete </button>
                                         </form>
-
-                                        <%
-                                                out.print("</td> </td>");
-
-                                            }
-
-                                        %>  
-
+                                        <%out.print("</td></td>");}%>  
                                         </tbody>
 
                                     </table>

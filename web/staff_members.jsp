@@ -43,7 +43,7 @@
                                     ArrayList<Staff> list = (ArrayList<Staff>) request.getAttribute("staffMembers");
                                     for (int i = 0; i < list.size(); i++) {
                                         out.print("<tr><td>" + (i + 1) + "</td>");
-                                        out.print("<td><a  style=\"text-decoration:underline\" href = /Office_Hours/OfficeHoursController?getStaffMembers=" + list.get(i).id +" >" + list.get(i).user_name + "</a></td>");
+                                        out.print("<td><a  style=\"text-decoration:underline\" href = /Office_Hours/OfficeHoursController?getStaffMembers=" + list.get(i).id +" >" + list.get(i).first_name+ " "+ list.get(i).last_name+ "</a></td>");
                                         out.print("<td>" + list.get(i).dapartment + "</td>");
                                         out.print("<td><a style=\"text-decoration:underline\" href = \"\" >" + list.get(i).mail + "</td></tr>");
                                     }

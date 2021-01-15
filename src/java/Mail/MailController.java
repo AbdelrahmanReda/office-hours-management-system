@@ -55,11 +55,23 @@ public class MailController extends HttpServlet {
         recipentes.remove(SessionController.getSessionAtrributeValue(request, "email"));
         return recipentes;
     }
-
+    private String  getConversationSubjectById(HttpServletRequest request) throws ClassNotFoundException, SQLException{
+        
+        PreparedStatement stm = DatabaseConnector.getConnection().prepareStatement("SELECT  subject FROM conversation WHERE id=?;");
+        stm.setInt(1, Integer.parseInt(request.getParameter("conversation_id")));
+        ResultSet rs = stm.executeQuery();
+        while (rs.next()) {            
+            return rs.getString("subject");
+        }
+        return null;
+    }
     private void storeUserMessageReply(HttpServletRequest request) throws ClassNotFoundException, SQLException {
+        System.out.println("request has now ya reda "+request );
         Set<String> recipents = getRecipents(request);
+        String subject = getConversationSubjectById(request);
         int messageId = storeMessage(request.getParameter("message_body"));
-
+        String from = SessionController.getSessionAtrributeValue(request, "email");
+        String pass = SessionController.getSessionAtrributeValue(request, "mail_password");
         for (String recipent : recipents) {
 
             PreparedStatement stm = DatabaseConnector.getConnection().prepareStatement("INSERT INTO  user_message VALUES  (DEFAULT,?,?,?,?)");
@@ -67,12 +79,10 @@ public class MailController extends HttpServlet {
             stm.setInt(2, Integer.parseInt(request.getParameter("conversation_id")));
             stm.setString(3, SessionController.getSessionAtrributeValue(request, "email"));
             stm.setString(4, recipent);
-
             stm.executeUpdate();
-
+            
+            MailConfiguration.SendEmailToStaff(from, recipent, subject, request.getParameter("message_body"), pass);
         }
-        
-        //MailConfiguration.SendEmailToStaff(from, recipients, subject, message, pass);
 
     }
 
@@ -145,14 +155,16 @@ public class MailController extends HttpServlet {
             }
 
             if (request.getParameter("recipients") != null) {
+                System.out.println("i am trying to send tranditional mai;");
                 String message = request.getParameter("message");
                 String subject = request.getParameter("subject");
                 String recipients = request.getParameter("recipients");
                 System.out.println("message " + message);
                 System.out.println("subject " + subject);
                 System.out.println("recipients " + recipients);
-                String from = "boodycat009@gmail.com";
-                String pass = "2266554488";
+                String from = SessionController.getSessionAtrributeValue(request, "email");
+                String pass = SessionController.getSessionAtrributeValue(request, "mail_password");
+
                 MailConfiguration.SendEmailToStaff(from, recipients, subject, message, pass);
                 request.setAttribute("status", "success");
                 request.getRequestDispatcher("compose_mail.jsp").forward(request, response);
@@ -161,7 +173,6 @@ public class MailController extends HttpServlet {
             }
         }
     }
-
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)

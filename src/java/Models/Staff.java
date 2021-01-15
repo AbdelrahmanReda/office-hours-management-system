@@ -18,6 +18,8 @@ public class Staff {
     public String gender;
     public String  country ;
     public String dapartment;
+    public String first_name;
+    public String last_name;
     
 
     /**

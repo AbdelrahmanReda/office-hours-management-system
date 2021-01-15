@@ -19,7 +19,7 @@
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item dropdown" style="">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <%  out.print(request.getSession().getAttribute("username"));%>
+                        <%  out.print(request.getSession().getAttribute("first_name") + " "+request.getSession().getAttribute("last_name"));%>
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="changeInfo">Change Info</a>

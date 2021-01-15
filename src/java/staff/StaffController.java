@@ -40,6 +40,8 @@ public class StaffController extends HttpServlet {
                 Staff obj = new Staff();
                 obj.id = rs.getInt("id");
                 obj.user_name = rs.getString("user_name");
+                obj.first_name=rs.getString("first_name");
+                obj.last_name=rs.getString("last_name");
                 obj.mail = rs.getString("mail");
                 obj.dapartment = rs.getString("dapartment");
                 staffMembers.add(obj);

@@ -53,6 +53,8 @@ public class validate extends HttpServlet {
                     session.setAttribute("id", id);
                     session.setAttribute("email", email);
                     session.setAttribute("username", user_name);
+                    session.setAttribute("first_name", rs.getString("first_name"));
+                    session.setAttribute("last_name", rs.getString("last_name"));
                     session.setAttribute("mail_password", rs.getString("mail_password"));
                     session.setAttribute("user_type", "student");
                     response.sendRedirect("DashboardController");
@@ -80,6 +82,8 @@ public class validate extends HttpServlet {
                     session.setAttribute("email", email);
                     session.setAttribute("id", id);
                     session.setAttribute("username", user_name);
+                    session.setAttribute("first_name", rs.getString("first_name"));
+                    session.setAttribute("last_name", rs.getString("last_name"));
                     session.setAttribute("mail_password", rs.getString("mail_password"));
                     session.setAttribute("user_type", "staff_member");
                     response.sendRedirect("DashboardController");
