@@ -73,14 +73,12 @@ public class MailController extends HttpServlet {
         String from = SessionController.getSessionAtrributeValue(request, "email");
         String pass = SessionController.getSessionAtrributeValue(request, "mail_password");
         for (String recipent : recipents) {
-
             PreparedStatement stm = DatabaseConnector.getConnection().prepareStatement("INSERT INTO  user_message VALUES  (DEFAULT,?,?,?,?)");
             stm.setInt(1, messageId);
             stm.setInt(2, Integer.parseInt(request.getParameter("conversation_id")));
             stm.setString(3, SessionController.getSessionAtrributeValue(request, "email"));
             stm.setString(4, recipent);
             stm.executeUpdate();
-            
             MailConfiguration.SendEmailToStaff(from, recipent, subject, request.getParameter("message_body"), pass);
         }
 

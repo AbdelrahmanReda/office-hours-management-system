@@ -39,7 +39,18 @@ public class AppointmentController extends HttpServlet {
         }
     }
 
-    private void notifyStudent(String studentMail,HttpServletRequest request) {
+    public void notifyStudentAsOficeHourCanceled(int officeHourId, HttpServletRequest request) throws SQLException, ClassNotFoundException {
+        ArrayList<String> studentMails = new ArrayList<>();
+        PreparedStatement stm = DatabaseConnector.getConnection().prepareStatement("SELECT mail FROM appointment INNER JOIN student ON appointment.student_id = student.id\n"
+                + "WHERE office_hour_id=?");
+        stm.setInt(1, officeHourId);
+        ResultSet rs = stm.executeQuery();
+        while (rs.next()) {
+            notifyStudent(rs.getString("mail"), request);
+        }
+    }
+
+    private void notifyStudent(String studentMail, HttpServletRequest request) {
         String from = SessionController.getSessionAtrributeValue(request, "email");
         String pass = SessionController.getSessionAtrributeValue(request, "mail_password");
         String recipients = studentMail;
@@ -48,7 +59,7 @@ public class AppointmentController extends HttpServlet {
         MailConfiguration.SendEmailToStaff(from, recipients, subject, message, pass);
     }
 
-    private void notifyStaffMember(String staffMail,HttpServletRequest request) {
+    private void notifyStaffMember(String staffMail, HttpServletRequest request) {
         String from = SessionController.getSessionAtrributeValue(request, "email");
         String pass = SessionController.getSessionAtrributeValue(request, "mail_password");
         String recipients = staffMail;
@@ -61,9 +72,7 @@ public class AppointmentController extends HttpServlet {
 
         try {
             if (isNumeric(request.getParameter("reservation_id"))) {
-
                 Integer id = Integer.parseInt(request.getParameter("reservation_id"));
-
                 if (SessionController.getSessionAtrributeValue(request, "user_type").equals("staff_member")) {
                     String studentMail = null;
                     PreparedStatement stm = DatabaseConnector.getConnection().prepareStatement("SELECT student.mail FROM appointment\n"
@@ -76,7 +85,7 @@ public class AppointmentController extends HttpServlet {
                         studentMail = rs.getString("mail");
                     }
 
-                    notifyStudent(studentMail,request);
+                    notifyStudent(studentMail, request);
 
                 } else {
 
@@ -88,7 +97,7 @@ public class AppointmentController extends HttpServlet {
                     ResultSet rs = stm.executeQuery();
                     while (rs.next()) {
                         StaffMail = rs.getString("mail");
-                        notifyStaffMember(StaffMail,request);
+                        notifyStaffMember(StaffMail, request);
                     }
 
                 }
@@ -113,7 +122,7 @@ public class AppointmentController extends HttpServlet {
                     String mail = rs.getString("mail");
                     System.out.println("we will bulk " + mail);
 
-                    notifyStudent(mail,request);
+                    notifyStudent(mail, request);
                 }
 
                 PreparedStatement stm = DatabaseConnector.getConnection().prepareStatement("DELETE  FROM  appointment WHERE id IN (\n"

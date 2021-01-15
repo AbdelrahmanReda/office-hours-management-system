@@ -136,13 +136,16 @@ public class OfficeHoursController extends HttpServlet {
         }
         return null;
     }
-
+    
+    
     public void deleteOfficeHour(HttpServletRequest request) {
+        
         try {
+            AppointmentController obj = new AppointmentController();
+            obj.notifyStudentAsOficeHourCanceled( Integer.parseInt(request.getParameter("id")), request);
             PreparedStatement stmt = DatabaseConnector.getConnection().prepareStatement("DELETE FROM office_hours where id=?");
             stmt.setInt(1, Integer.parseInt(request.getParameter("id")));
             stmt.executeUpdate();
-
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(OfficeHoursController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -179,14 +182,11 @@ public class OfficeHoursController extends HttpServlet {
                 request.getRequestDispatcher("staff_member.jsp").forward(request, response);
 
             } else if (request.getParameter("office_hour_id") != null && request.getParameter("staff_id") != null) {
-
-
                 reserveOfficeHours(request);
                 response.sendRedirect("AppointmentController");
 
             } else {
                 request.setAttribute("OfficeHours", getOfficeHourse(request));
-
                 if (request.getParameter("operation").equals("selection")) {
                     String json = new Gson().toJson(getOfficeHourse(request));
                     response.setContentType("application/json");
@@ -196,22 +196,18 @@ public class OfficeHoursController extends HttpServlet {
                 }
                 if (request.getParameter("operation").equals("delete")) {
                     deleteOfficeHour(request);
-
                     String json = new Gson().toJson(getOfficeHourse(request));
                     response.setContentType("application/json");
                     response.setCharacterEncoding("UTF-8");
                     response.getWriter().write(json);
                 }
                 if (request.getParameter("operation").equals("update")) {
-                  
                     updateOfficeHour(request);
                 }
                 if (request.getParameter("operation").equals("insertion")) {
                     insertOfficeHour(request);
                 }
-
             }
-
         }
     }
 
