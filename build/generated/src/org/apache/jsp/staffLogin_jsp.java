@@ -49,9 +49,6 @@ public final class staffLogin_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.write("\n");
       out.write("\n");
       out.write("\n");
-      out.write("<!DOCTYPE html>\n");
-      out.write("\n");
-      out.write("<!DOCTYPE html>\n");
       out.write("<html>\n");
       out.write("    <head>\n");
       out.write("        <title>TODO supply a title</title>\n");
@@ -119,7 +116,6 @@ public final class staffLogin_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.write("                                <button style=\"width: 100%\" type=\"submit\" class=\"btn btn-primary\">Sign in</button>  \n");
       out.write("                                <div class=\"d-flex justify-content-center align-items-center mt-2 flex-column\">\n");
       out.write("                                    <small text-center>Are you Student?</small>\n");
-      out.write("                                   \n");
       out.write("                                    <a style=\"text-decoration: underline\" href=\"login.jsp\">Login in as Student</a>\n");
       out.write("                                </div>\n");
       out.write("                            </form>    \n");

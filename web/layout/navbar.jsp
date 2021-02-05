@@ -18,8 +18,12 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item dropdown" style="">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle" style="display: flex;flex-direction: column;justify-content: end;align-items: flex-end;padding-right: 25px;" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <%  out.print(request.getSession().getAttribute("first_name") + " "+request.getSession().getAttribute("last_name"));%>
+                        <br>
+                        <span style="color: #cccccc;">
+                        <%  out.print(request.getSession().getAttribute("email")); %>
+                        </span>
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="changeInfo">Change Info</a>

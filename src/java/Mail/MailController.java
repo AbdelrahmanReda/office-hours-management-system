@@ -146,13 +146,14 @@ public class MailController extends HttpServlet {
                 if (request.getParameter("operation").equals("reply")) {
                     System.out.println("request has" + request);
                     storeUserMessageReply(request);
-                    System.out.println("Hello amy heeeeeeeeeeeeeeeeeeeeeeeeer");
                     request.getRequestDispatcher("InboxController").forward(request, response);
                     return;
                 }
             }
 
             if (request.getParameter("recipients") != null) {
+                System.out.println("request has "+request);
+                
                 System.out.println("i am trying to send tranditional mai;");
                 String message = request.getParameter("message");
                 String subject = request.getParameter("subject");

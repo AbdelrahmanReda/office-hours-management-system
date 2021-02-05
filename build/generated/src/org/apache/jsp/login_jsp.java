@@ -54,7 +54,7 @@ public final class login_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.write("<!DOCTYPE html>\n");
       out.write("<html>\n");
       out.write("    <head>\n");
-      out.write("        <title>TODO supply a title</title>\n");
+      out.write("       \n");
       out.write("        <meta charset=\"UTF-8\">\n");
       out.write("        <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n");
       out.write("        <link href=\"https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css\" rel=\"stylesheet\" integrity=\"sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1\" crossorigin=\"anonymous\">\n");
@@ -62,7 +62,6 @@ public final class login_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.write("        <script src=\"https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js\" integrity=\"sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW\" crossorigin=\"anonymous\"></script>\n");
       out.write("    </head>\n");
       out.write("    <body>\n");
-      out.write("        \n");
       out.write("        <div class=\"container\">\n");
       out.write("            <div class=\"row\" >\n");
       out.write("                <div class=\"col-lg-12 \" style=\"padding-top: 225px\">\n");
@@ -109,20 +108,16 @@ public final class login_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.write("                                <div class=\"mb-3\">\n");
       out.write("                                    <label for=\"customer_id\" class=\"form-label\">Student Mail</label>\n");
       out.write("                                    <input type=\"mail\" class=\"form-control  \" id=\"customer_id\" name=\"email\">\n");
-      out.write("\n");
       out.write("                                </div>\n");
       out.write("                                <div class=\"mb-3\">\n");
       out.write("                                    <label for=\"customer_password\" class=\"form-label\">Password</label>\n");
       out.write("                                    <input type=\"password\" class=\"form-control \" id=\"customer_password\" name=\"password\">\n");
-      out.write("\n");
       out.write("                                </div>\n");
       out.write("                                <input type=\"hidden\"  name=\"user_type\" value=\"student\">\n");
-      out.write("\n");
       out.write("                                <button style=\"width: 100%\" type=\"submit\" class=\"btn btn-primary\">Sign in</button>\n");
       out.write("                                <div class=\"d-flex justify-content-center align-items-center mt-2 flex-column\">\n");
       out.write("                                    <br>\n");
-      out.write("                                    <small text-center>Are you Staff Member?</small>\n");
-      out.write("                                    \n");
+      out.write("                                    <small text-center>Are you Staff Member?</small>                                   \n");
       out.write("                                    <a style=\"text-decoration: underline\" href=\"staffLogin.jsp\">Login in as Staff Member</a>\n");
       out.write("                                </div>\n");
       out.write("                            </form>    \n");

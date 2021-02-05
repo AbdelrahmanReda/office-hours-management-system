@@ -23,7 +23,7 @@
                     }
                     if (request.getAttribute("status") != null) {
                         if (request.getAttribute("status").equals("success")) {
-                            out.print("<script> swal(\"Good job!\", \"You clicked the button!\", \"success\")</script>");
+                            out.print("<script> swal(\"Great!\", \"Message sent successfully!\", \"success\")</script>");
                         }
                     }
                 %>
@@ -36,11 +36,11 @@
                         <form action="MailController" method="POST" >
                             <div class="form-group">
                                 <label for="recipients">Email address</label>
-                                <input type="text" class="form-control" name="recipients" id="recipients" placeholder="name@example.com">
+                                <input type="email" class="form-control" name="recipients" id="recipients" placeholder="name@example.com" required=>
                             </div>
                             <div class="form-group">
                                 <label for="subject">Subject</label>
-                                <input type="text" class="form-control" id="subject" name="subject" placeholder="Regarding to assignment 1">
+                                <input type="text" class="form-control" id="subject"  name="subject" placeholder="Regarding to assignment 1">
                             </div>
                             <div class="form-group">
                                 <label for="message">Message</label>

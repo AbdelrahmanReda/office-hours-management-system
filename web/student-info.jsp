@@ -34,7 +34,7 @@
 
                                                 <div class="form-group">
                                                     <label for="student-id">Student id</label>
-                                                    <input type="number" class="form-control" min="1" id="student-id" name="student_id" placeholder="20170145">
+                                                    <input required type="number" class="form-control" min="1" id="student-id" name="student_id" placeholder="20170145">
                                                 </div>
 
                                                 <button type="submit" class="btn btn-primary">Search for Student</button>
@@ -48,12 +48,22 @@
                                         <div class="card-header">
                                             <h5>Student Personal Information</h5>
                                         </div>
+                                      
                                         <div class="card-body">
                                             ${studentInforamtion.getUser_name()}
+                                            <br>
                                             ${studentInforamtion.getMail()}
+                                            <br>
+
                                             ${studentInforamtion.getGender()}
+                                            <br>
+
                                             ${studentInforamtion.getCountry()}
+                                            <br>
+
                                             ${studentInforamtion.getStudent_level()}
+                                            <br>
+
                                             ${studentInforamtion.getStudent_gpa()}
                                         </div>
                                     </div>
@@ -112,12 +122,5 @@
 <%@ include file = "layout\scripts.jsp" %>
 
 
-<script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js" ></script>
-<script src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js" ></script>
-<script>
-                                        $(document).ready(function () {
-                                            $('#example').DataTable();
-                                        });
 
-</script>
 <script>  $('.student').toggleClass('activeElement');</script>

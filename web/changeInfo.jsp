@@ -21,15 +21,19 @@
         <div class="container">
             <div class="row" >
                 <div class="col-lg-12 " style="padding-top: 225px">
-                     <%  response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); %>
-        
-                    <form  class="login-form" method="POST"  action="changeInfo">
+                    <%  response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); %>
+                    <div class="card" >
+                        <div class="card-header">
+                              <h6>Change Personal Information</h6>
+                        </div>
+                        <div class="card-body">
+                              <form   method="POST"  action="changeInfo">
                         <input type="hidden" name="operation" value="update">
                         <%
                             if (session.getAttribute("update_status") != null) {
                         %>
                         <div class="alert alert-success" role="alert">
-                           Personal info updated successfully!
+                            Personal info updated successfully!
                         </div>
 
                         <%
@@ -47,10 +51,7 @@
                         <div class="mb-3">
                             <label for="student_password" class="form-label">Password</label>
                             <input type="password" class="form-control " id="student_password" name="password">
-
                         </div>
-
-
                         <div class="form-group">
                             <label for="student_country">Country</label>
                             <select class="form-control" id="exampleFormControlSelect1" id="country" name="country">
@@ -341,7 +342,11 @@
                         <div class="d-flex justify-content-center align-items-center mt-2 flex-column">
 
                         </div>
-                    </form>    
+                    </form>  
+                        </div>
+                    </div>
+
+                    
                 </div>
             </div>
         </div>
