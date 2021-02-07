@@ -40,13 +40,16 @@ public class signUp extends HttpServlet {
             throws ServletException, IOException, ClassNotFoundException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            System.out.println("reqest has " + request);
+            System.out.println("reqest has of sign up has " + request);
+       
+           
+            
             String password = MailConfiguration.generatePassword(8).toString();
             if (request.getParameter("user_type").equals("staff")) {
-                 PreparedStatement statement = DatabaseConnector.getConnection().prepareStatement("SELECT * FROM staff WHERE  mail=? OR mail=?;");
+                 PreparedStatement statement = DatabaseConnector.getConnection().prepareStatement("SELECT * FROM staff WHERE  mail=? OR user_name=?;");
                 statement.setString(1, request.getParameter("email"));
                 statement.setString(2, request.getParameter("user_name"));
-                if (hasRows(statement)) {
+                if (hasRows(statement) || request.getParameter("g-recaptcha-response").equals("") ) {
                     HttpSession session = request.getSession();
                     session.setAttribute("invalid_data", "true");
                     request.getRequestDispatcher("signup.jsp").forward(request, response);

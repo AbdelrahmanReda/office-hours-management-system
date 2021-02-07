@@ -153,8 +153,6 @@ public class MailController extends HttpServlet {
 
             if (request.getParameter("recipients") != null) {
                 System.out.println("request has "+request);
-                
-                System.out.println("i am trying to send tranditional mai;");
                 String message = request.getParameter("message");
                 String subject = request.getParameter("subject");
                 String recipients = request.getParameter("recipients");
@@ -163,7 +161,6 @@ public class MailController extends HttpServlet {
                 System.out.println("recipients " + recipients);
                 String from = SessionController.getSessionAtrributeValue(request, "email");
                 String pass = SessionController.getSessionAtrributeValue(request, "mail_password");
-
                 MailConfiguration.SendEmailToStaff(from, recipients, subject, message, pass);
                 request.setAttribute("status", "success");
                 request.getRequestDispatcher("compose_mail.jsp").forward(request, response);

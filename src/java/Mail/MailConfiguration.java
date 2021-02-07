@@ -89,7 +89,6 @@ public class MailConfiguration {
         System.out.println("to is "+to[0]);
         String subject = emailSubject;
         String body = emailBody;
-
         Properties props = System.getProperties();
         String host = "pop.gmail.com";
         props.put("mail.smtp.starttls.enable", "true");

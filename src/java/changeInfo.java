@@ -30,60 +30,86 @@ import javax.servlet.http.HttpSession;
 @WebServlet(urlPatterns = {"/changeInfo"})
 public class changeInfo extends HttpServlet {
 
+    private boolean hasRows(PreparedStatement statement) throws SQLException {
+        ResultSet rs = statement.executeQuery();
+        while (rs.next()) {
+            return true;
+        }
+        return false;
+    }
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, ClassNotFoundException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            
-            if (request.getParameter("operation")!=null) {
+
+            if (request.getParameter("operation") != null) {
                 HttpSession session = request.getSession();
-            String username = (String) session.getAttribute("username");
+                String username = (String) session.getAttribute("username");
+/*
+                String userType = (String) session.getAttribute("user_type");
 
-            try {
-
-                if (!request.getParameter("mail").equals("")) {
-                    PreparedStatement stmt = DatabaseConnector.getConnection().prepareStatement("UPDATE student set student.mail =?  WHERE user_name=? ;");
-                    stmt.setString(1, request.getParameter("mail"));
-                    stmt.setString(2, username);
-                    stmt.executeUpdate();
-
+                if (userType.equals("staff")) {
+                    PreparedStatement statement = DatabaseConnector.getConnection().prepareStatement("SELECT * FROM staff WHERE  mail=? ");
+                    statement.setString(1, request.getParameter("mail"));
+                    if (hasRows(statement)) {
+                        session.setAttribute("invalid_data", "true");
+                        request.getRequestDispatcher("changeInfo.jsp").forward(request, response);
+                        return;
+                    }
+                } else {
+                    PreparedStatement statement = DatabaseConnector.getConnection().prepareStatement("SELECT * FROM studet WHERE  mail=? ");
+                    statement.setString(1, request.getParameter("mail"));
+                    if (hasRows(statement)) {
+                        session.setAttribute("invalid_data", "true");
+                        request.getRequestDispatcher("changeInfo.jsp").forward(request, response);
+                        return;
+                    }
                 }
-                if (!request.getParameter("password").equals("")) {
+                */
 
-                    PreparedStatement stmt = DatabaseConnector.getConnection().prepareStatement("UPDATE student set student.password =?   WHERE user_name=? ;");
-                    stmt.setString(1, request.getParameter("password"));
-                    stmt.setString(2, username);
-                    stmt.executeUpdate();
+                try {
 
+                    if (!request.getParameter("mail").equals("")) {
+                        PreparedStatement stmt = DatabaseConnector.getConnection().prepareStatement("UPDATE student set student.mail =?  WHERE user_name=? ;");
+                        stmt.setString(1, request.getParameter("mail"));
+                        stmt.setString(2, username);
+                        stmt.executeUpdate();
+
+                    }
+                    if (!request.getParameter("password").equals("")) {
+
+                        PreparedStatement stmt = DatabaseConnector.getConnection().prepareStatement("UPDATE student set student.password =?   WHERE user_name=? ;");
+                        stmt.setString(1, request.getParameter("password"));
+                        stmt.setString(2, username);
+                        stmt.executeUpdate();
+
+                    }
+                    if (!request.getParameter("gender").equals("")) {
+
+                        PreparedStatement stmt = DatabaseConnector.getConnection().prepareStatement("UPDATE student set student.gender =?   WHERE user_name=? ;");
+                        stmt.setString(1, request.getParameter("gender"));
+                        stmt.setString(2, username);
+                        stmt.executeUpdate();
+
+                    }
+                    if (!request.getParameter("country").equals("")) {
+
+                        PreparedStatement stmt = DatabaseConnector.getConnection().prepareStatement("UPDATE student set student.country =?  WHERE user_name=? ;");
+                        stmt.setString(1, request.getParameter("country"));
+                        stmt.setString(2, username);
+                        stmt.executeUpdate();
+                    }
+                    session.setAttribute("update_status", "true");
+
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
                 }
-                if (!request.getParameter("gender").equals("")) {
 
-                    PreparedStatement stmt = DatabaseConnector.getConnection().prepareStatement("UPDATE student set student.gender =?   WHERE user_name=? ;");
-                    stmt.setString(1, request.getParameter("gender"));
-                    stmt.setString(2, username);
-                    stmt.executeUpdate();
-
-                }
-                if (!request.getParameter("country").equals("")) {
-
-                    PreparedStatement stmt = DatabaseConnector.getConnection().prepareStatement("UPDATE student set student.country =?  WHERE user_name=? ;");
-                    stmt.setString(1, request.getParameter("country"));
-                    stmt.setString(2, username);
-                    stmt.executeUpdate();
-                }
-                session.setAttribute("update_status", "true");
-
-
-            } catch (SQLException ex) {
-                ex.printStackTrace();
             }
-                
-            }
-            
+
             request.getRequestDispatcher("changeInfo.jsp").forward(request, response);
-                            
-            
-            
+
         }
     }
 
